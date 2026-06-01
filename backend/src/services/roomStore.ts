@@ -55,6 +55,7 @@ export function createRoom(playerName?: string) {
     code: generateUniqueCode(),
     status: "lobby",
     participants: [participant],
+    hostId: participant.id,
     createdAt: now(),
     updatedAt: now()
   };
@@ -86,7 +87,7 @@ export function joinRoom(code: string, playerName?: string) {
 }
 
 export function getRoom(code: string) {
-  const room = rooms.get(code);
+  const room = rooms.get(code.trim().toUpperCase());
   return room ? cloneRoom(room) : null;
 }
 
@@ -96,13 +97,55 @@ export function saveRoom(room: Room) {
   return getRoom(room.code);
 }
 
+export function startGame(code: string, participantId: string): { success: boolean; error?: string } {
+  const room = rooms.get(code.trim().toUpperCase());
+  if (!room) {
+    return { success: false, error: "Room not found" };
+  }
+  if (room.hostId !== participantId) {
+    return { success: false, error: "Only the host can start the game" };
+  }
+  if (room.participants.length < 2) {
+    return { success: false, error: "At least 2 players are required to start the game" };
+  }
+  room.status = "game";
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+  return { success: true };
+}
+
+export function leaveRoom(code: string, participantId: string): { success: boolean; error?: string } {
+  const room = rooms.get(code.trim().toUpperCase());
+  if (!room) {
+    return { success: false, error: "Room not found" };
+  }
+
+  if (room.hostId === participantId) {
+    rooms.delete(room.code);
+    return { success: true };
+  }
+
+  const index = room.participants.findIndex((p) => p.id === participantId);
+  if (index !== -1) {
+    room.participants.splice(index, 1);
+    room.updatedAt = now();
+    rooms.set(room.code, room);
+    return { success: true };
+  }
+
+  return { success: false, error: "Participant not found" };
+}
+
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
   void viewerParticipantId;
 
   return {
     code: room.code,
     status: room.status,
-    participants: room.participants.map((participant) => ({ ...participant })),
+    participants: room.participants.map((participant) => ({
+      ...participant,
+      isHost: participant.id === room.hostId
+    })),
     availableWords: listWords(),
     roles: [...STARTER_ROLES]
   };

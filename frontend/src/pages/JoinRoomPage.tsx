@@ -20,12 +20,20 @@ export function JoinRoomPage() {
       setError("Name is required");
       return;
     }
+    if (trimmedName.length > 32) {
+      setError("Name must be 32 characters or less");
+      return;
+    }
     if (!trimmedCode) {
       setError("Room code is required");
       return;
     }
     if (trimmedCode.length !== 4) {
       setError("Room code must be exactly 4 characters");
+      return;
+    }
+    if (!/^[A-Z0-9]{4}$/.test(trimmedCode)) {
+      setError("Room code must contain only letters and numbers");
       return;
     }
 

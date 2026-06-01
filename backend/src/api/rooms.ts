@@ -4,9 +4,11 @@ import {
   HttpError,
   joinRoomSchema,
   roomCodeParamsSchema,
-  roomViewerQuerySchema
+  roomViewerQuerySchema,
+  startGameSchema,
+  leaveRoomSchema
 } from "./schemas.js";
-import { createRoom, getRoom, joinRoom, toRoomSnapshot } from "../services/roomStore.js";
+import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom } from "../services/roomStore.js";
 
 export function createRoomsRouter() {
   const router = Router();
@@ -57,6 +59,39 @@ export function createRoomsRouter() {
       response.json({
         room: toRoomSnapshot(room, participantId)
       });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/start", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const { participantId } = startGameSchema.parse(request.body);
+
+      const result = startGame(code, participantId);
+      if (!result.success) {
+        const statusCode = result.error?.includes("Only the host") ? 403 : 400;
+        throw new HttpError(statusCode, result.error ?? "Failed to start game");
+      }
+
+      response.json({ success: true, status: "game" });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/leave", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const { participantId } = leaveRoomSchema.parse(request.body);
+
+      const result = leaveRoom(code, participantId);
+      if (!result.success) {
+        throw new HttpError(404, result.error ?? "Failed to leave room");
+      }
+
+      response.json({ success: true, message: "Left room successfully" });
     } catch (error) {
       next(error);
     }

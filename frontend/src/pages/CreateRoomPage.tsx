@@ -17,6 +17,10 @@ export function CreateRoomPage() {
       setError("Name is required");
       return;
     }
+    if (trimmedName.length > 32) {
+      setError("Name must be 32 characters or less");
+      return;
+    }
 
     try {
       setError(null);

@@ -4,7 +4,7 @@
 
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/rooms-api.md, quickstart.md
 
-**Tests**: Unit tests are included for store logic and api route handlers to ensure code correctness and maintain 80% test coverage.
+**Tests**: Unit tests are included for store logic and api route handlers to ensure code correctness and maintain 90% test coverage.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -21,7 +21,7 @@
 **Purpose**: Project initialization and validation
 
 - [ ] T001 Verify and install dependencies in [backend/package.json](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/package.json) and [frontend/package.json](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/package.json)
-- [ ] T002 Verify dev script execution for [backend/src/server.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/server.ts) and [frontend/src/main.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/main.tsx)
+- [x] T002 Verify dev script execution for [backend/src/server.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/server.ts) and [frontend/src/main.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/main.tsx)
 
 ---
 
@@ -31,9 +31,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Extend the models to track hostId in [backend/src/models/game.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/models/game.ts)
-- [ ] T004 Update Participant interface to match backend types in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
-- [ ] T005 [P] Create stubs for start and leave room endpoints in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
+- [x] T003 Extend the models to track hostId in [backend/src/models/game.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/models/game.ts)
+- [x] T004 Update Participant interface to match backend types in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
+- [x] T005 [P] Create stubs for start and leave room endpoints in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -47,10 +47,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Write backend unit tests for host designation in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
-- [ ] T007 [US1] Update createRoom to assign the participant ID to hostId in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T008 [US1] Update toRoomSnapshot to set isHost dynamically in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T009 [US1] Update LobbyPage to display Host badge next to the host's name in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T006 [P] [US1] Write backend unit tests for host designation in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
+- [x] T007 [US1] Update createRoom to assign the participant ID to hostId in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T008 [US1] Update toRoomSnapshot to set isHost dynamically in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T009 [US1] Update LobbyPage to display Host badge next to the host's name in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
 
 **Checkpoint**: User Story 1 is functional. The room creator is correctly labeled and rendered as the host.
 
@@ -64,10 +64,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T010 [P] [US2] Update Zod validation schemas for playerName and code in [backend/src/api/schemas.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.ts)
-- [ ] T011 [P] [US2] Write unit tests for schemas validation in [backend/src/api/schemas.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.test.ts)
-- [ ] T012 [US2] Add client-side empty name validation in [frontend/src/pages/CreateRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/CreateRoomPage.tsx) and [frontend/src/pages/JoinRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/JoinRoomPage.tsx)
-- [ ] T013 [US2] Handle 404 Room Not Found and bad requests to show message alert in [frontend/src/pages/JoinRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/JoinRoomPage.tsx)
+- [x] T010 [P] [US2] Update Zod validation schemas for playerName and code in [backend/src/api/schemas.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.ts)
+- [x] T011 [P] [US2] Write unit tests for schemas validation in [backend/src/api/schemas.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.test.ts)
+- [x] T012 [US2] Add client-side empty name validation in [frontend/src/pages/CreateRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/CreateRoomPage.tsx) and [frontend/src/pages/JoinRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/JoinRoomPage.tsx)
+- [x] T013 [US2] Handle 404 Room Not Found and bad requests to show message alert in [frontend/src/pages/JoinRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/JoinRoomPage.tsx)
 
 **Checkpoint**: Joining rooms is fully validated, and user feedback matches requirements.
 
@@ -81,8 +81,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T014 [P] [US3] Write unit test asserting state isolation between two active rooms in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
-- [ ] T015 [US3] Uppercase-normalize and trim room codes in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts) and [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
+- [x] T014 [P] [US3] Write unit test asserting state isolation between two active rooms in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
+- [x] T015 [US3] Uppercase-normalize and trim room codes in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts) and [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
 
 **Checkpoint**: Multiple lobbies can run concurrently without state leaks.
 
@@ -96,8 +96,8 @@
 
 ### Implementation for User Story 4
 
-- [ ] T016 [US4] Implement a setInterval loop triggering fetchRoom every 2s in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
-- [ ] T017 [US4] Add network warning banner showing retry connection status in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T016 [US4] Implement a setInterval loop triggering fetchRoom every 2s in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T017 [US4] Add network warning banner showing retry connection status in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
 
 **Checkpoint**: Auto-polling keeps clients in sync, and handles transient network loss.
 
@@ -111,13 +111,13 @@
 
 ### Implementation for User Story 5
 
-- [ ] T018 [P] [US5] Add unit tests for start game validation rules in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
-- [ ] T019 [US5] Implement startGame state transition (updating status to "game") in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T020 [US5] Implement POST /rooms/:code/start endpoint with host verification in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
-- [ ] T021 [US5] Implement startGame API method and store handler in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts) and [frontend/src/state/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/state/roomStore.ts)
-- [ ] T022 [US5] Conditionally render Start Game button only if current player is host in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
-- [ ] T023 [US5] Disable Start Game button when participant count is less than 2 in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
-- [ ] T024 [US5] Redirect guest/host players to `/game` route once room status transitions to "game" in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T018 [P] [US5] Add unit tests for start game validation rules in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
+- [x] T019 [US5] Implement startGame state transition (updating status to "game") in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T020 [US5] Implement POST /rooms/:code/start endpoint with host verification in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
+- [x] T021 [US5] Implement startGame API method and store handler in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts) and [frontend/src/state/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/state/roomStore.ts)
+- [x] T022 [US5] Conditionally render Start Game button only if current player is host in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T023 [US5] Disable Start Game button when participant count is less than 2 in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T024 [US5] Redirect guest/host players to `/game` route once room status transitions to "game" in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
 
 **Checkpoint**: Game start is secure, validated, and synchronized across participants.
 
@@ -127,11 +127,11 @@
 
 **Purpose**: Handle edge cases such as leaving the room, cleanup, and styling alignment.
 
-- [ ] T025 Implement host leave room deletion logic in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T026 Add leave button click handler calling leave endpoint in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
-- [ ] T027 Redirect guests to landing page on room termination in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
-- [ ] T028 Verify all styling is compliant with Vanilla CSS guidelines in [frontend/src/styles/app.css](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/styles/app.css)
-- [ ] T029 Run the verification steps in [specs/002-room-setup-lobby/quickstart.md](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/specs/002-room-setup-lobby/quickstart.md) to validate the full feature
+- [x] T025 Implement host leave room deletion logic in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T026 Add leave button click handler calling leave endpoint in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T027 Redirect guests to landing page on room termination in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T028 Verify all styling is compliant with Vanilla CSS guidelines in [frontend/src/styles/app.css](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/styles/app.css)
+- [x] T029 Run the verification steps in [specs/002-room-setup-lobby/quickstart.md](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/specs/002-room-setup-lobby/quickstart.md) to validate the full feature
 
 ---
 

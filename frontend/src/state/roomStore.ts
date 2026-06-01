@@ -77,6 +77,14 @@ class RoomStore {
     });
   }
 
+  clearSession() {
+    this.setState({
+      room: null,
+      participantId: null,
+      error: null
+    });
+  }
+
   async createRoom(playerName: string) {
     const response = await this.withLoading(() => api.createRoom(playerName));
     this.setRoomSession(response);
@@ -99,6 +107,30 @@ class RoomStore {
     );
     this.setRoomSnapshot(response.room);
     return response.room;
+  }
+
+  async startGame() {
+    if (!this.state.room || !this.state.participantId) {
+      return null;
+    }
+
+    const response = await this.withLoading(() =>
+      api.startGame(this.state.room!.code, this.state.participantId!)
+    );
+    await this.fetchRoom();
+    return response;
+  }
+
+  async leaveRoom() {
+    if (!this.state.room || !this.state.participantId) {
+      return null;
+    }
+
+    const response = await this.withLoading(() =>
+      api.leaveRoom(this.state.room!.code, this.state.participantId!)
+    );
+    this.clearSession();
+    return response;
   }
 }
 
