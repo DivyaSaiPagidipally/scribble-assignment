@@ -30,7 +30,7 @@ function generateUniqueCode() {
 }
 
 function displayName(name?: string) {
-  return name || "Player";
+  return name ? name.trim() : "Player";
 }
 
 function createParticipant(name?: string): Participant {
@@ -68,7 +68,7 @@ export function createRoom(playerName?: string) {
 }
 
 export function joinRoom(code: string, playerName?: string) {
-  const room = rooms.get(code);
+  const room = rooms.get(code.trim().toUpperCase());
 
   if (!room) {
     return null;
