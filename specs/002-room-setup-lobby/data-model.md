@@ -82,7 +82,7 @@ stateDiagram-v2
 - **Action**: A new `Participant` is created and appended to `Room.participants`.
 
 ### 3. Participant Leave
-- **Trigger**: `POST /api/rooms/:code/leave` with `participantId`.
+- **Trigger**: `DELETE /api/rooms/:code/leave` with `participantId`.
 - **Action**:
   - **Case A: Participant is a Guest**: The participant is removed from `Room.participants`. If this brings the participant count below 2, the "Start Game" button becomes disabled for the host.
   - **Case B: Participant is the Host**: The room is immediately deleted from the backend store. Any subsequent polling request from guests will return a `404 Not Found` error, which redirects guests to the landing page.

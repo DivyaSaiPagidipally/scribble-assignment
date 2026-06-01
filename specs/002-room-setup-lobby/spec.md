@@ -4,7 +4,7 @@
 
 **Created**: 2026-06-01
 
-**Status**: Draft
+**Status**: Implemented
 
 **Input**: User description: "create this feature under specs folder itself. Refer document.md and go with ### Group 1 — Room Setup & Lobby"
 
@@ -89,7 +89,7 @@ As the host in a lobby, I want to be the only person who can see and click the "
 - **FR-001**: System MUST automatically track the room creator as the host.
 - **FR-002**: System MUST reject empty or invalid room codes on join with clear error messages in the UI.
 - **FR-003**: System MUST isolate different rooms such that participant lists and room states do not bleed across room codes.
-- **FR-004**: Frontend MUST poll the server status endpoint for the active room automatically at a regular ~2s interval when on the Lobby page.
+- **FR-004**: Frontend MUST poll the server status endpoint for the active room automatically at a regular 2000ms (2s) interval when on the Lobby page.
 - **FR-005**: Frontend MUST restrict the visibility of the "Start Game" button in the lobby to the host only.
 - **FR-006**: Frontend MUST disable the "Start Game" button for the host when the participant count is less than 2.
 - **FR-007**: System MUST immediately terminate the room and redirect guests to the landing page if the host leaves or disconnects from the lobby.
@@ -104,7 +104,7 @@ As the host in a lobby, I want to be the only person who can see and click the "
 ### Measurable Outcomes
 - **SC-001**: The lobby list updates automatically within 2.5 seconds of a new player joining without manual refresh.
 - **SC-002**: Non-host participants never see or have access to start the game session.
-- **SC-003**: The "Start Game" button transitions from disabled to enabled within 200ms of a second participant joining.
+- **SC-003**: The "Start Game" button transitions from disabled to enabled within 2.5 seconds of a second participant joining (bounded by the 2s polling interval).
 - **SC-004**: Submitting empty names or invalid room codes shows validation error messages on screen within 200ms.
 
 ## Assumptions

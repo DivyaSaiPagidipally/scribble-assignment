@@ -50,7 +50,7 @@ We will:
 
 1. **TypeScript Strict Mode**: Yes. The codebase compiles with strict TS checks, and all new code will have explicit, strong typing.
 2. **Functional React Components**: Yes. `LobbyPage` and other pages are functional components utilizing standard hooks (`useEffect`, `useState`, `useSyncExternalStore`).
-3. **80% Test Coverage Requirement**: Yes. Core room and API helpers will have unit tests ensuring at least 80% coverage.
+3. **90% Test Coverage Requirement**: Yes. Core room and API helpers will have unit tests ensuring at least 90% coverage.
 4. **Pure HTTP Polling & Single-Round Scope**: Yes. Auto-polling in `LobbyPage` uses standard `setInterval` at a ~2s interval. No real-time transport protocol is used.
 5. **In-Memory Isolated Storage**: Yes. All rooms are stored in-memory, keyed by room code in a map.
 
@@ -78,12 +78,13 @@ backend/
 │   ├── api/
 │   │   ├── rooms.ts     # Room routes (/rooms, /rooms/:code/join, /rooms/:code/start, /rooms/:code/leave)
 │   │   ├── router.ts    # Main router mapping
-│   │   └── schemas.ts   # Zod request validators
+│   │   ├── schemas.ts   # Zod request validators
+│   │   └── schemas.test.ts  # Zod schema unit tests
 │   ├── models/
 │   │   └── game.ts      # Game, Room, and Participant types
 │   └── services/
-│       └── roomStore.ts # Core in-memory storage, join/leave/start logic
-└── tests/
+│       ├── roomStore.ts      # Core in-memory storage, join/leave/start logic
+│       └── roomStore.test.ts # Unit tests for room store business logic
 
 frontend/
 ├── src/

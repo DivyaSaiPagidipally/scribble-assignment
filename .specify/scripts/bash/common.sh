@@ -129,28 +129,37 @@ check_feature_branch() {
     local raw="$1"
     local has_git_repo="$2"
 
-    # For non-git repos, we can't enforce branch naming but still provide output
-    if [[ "$has_git_repo" != "true" ]]; then
-        echo "[specify] Warning: Git repository not detected; skipped branch validation" >&2
-        return 0
-    fi
-
-    local branch
-    branch=$(spec_kit_effective_branch_name "$raw")
-
-    # Accept sequential prefix (3+ digits) but exclude malformed timestamps
-    # Malformed: 7-or-8 digit date + 6-digit time with no trailing slug (e.g. "2026031-143022" or "20260319-143022")
-    local is_sequential=false
-    if [[ "$branch" =~ ^[0-9]{3,}- ]] && [[ ! "$branch" =~ ^[0-9]{7}-[0-9]{6}- ]] && [[ ! "$branch" =~ ^[0-9]{7,8}-[0-9]{6}$ ]]; then
-        is_sequential=true
-    fi
-    if [[ "$is_sequential" != "true" ]] && [[ ! "$branch" =~ ^[0-9]{8}-[0-9]{6}- ]]; then
-        echo "ERROR: Not on a feature branch. Current branch: $raw" >&2
-        echo "Feature branches should be named like: 001-feature-name, 1234-feature-name, or 20260319-143022-feature-name" >&2
-        return 1
-    fi
-
+    # Branch-name validation is intentionally disabled for this project.
+    # All features are developed on a single long-lived branch (e.g. scribble-lab).
+    # To re-enable per-feature branch enforcement, remove the early return below
+    # and uncomment the validation block.
     return 0
+
+    # -- Original branch validation (disabled) ---------------------------
+    # # For non-git repos, we can't enforce branch naming but still provide output
+    # if [[ "$has_git_repo" != "true" ]]; then
+    #     echo "[specify] Warning: Git repository not detected; skipped branch validation" >&2
+    #     return 0
+    # fi
+    #
+    # local branch
+    # branch=$(spec_kit_effective_branch_name "$raw")
+    #
+    # # Accept sequential prefix (3+ digits) but exclude malformed timestamps
+    # # Malformed: 7-or-8 digit date + 6-digit time with no trailing slug
+    # # (e.g. "2026031-143022" or "20260319-143022")
+    # local is_sequential=false
+    # if [[ "$branch" =~ ^[0-9]{3,}- ]] && [[ ! "$branch" =~ ^[0-9]{7}-[0-9]{6}- ]] && [[ ! "$branch" =~ ^[0-9]{7,8}-[0-9]{6}$ ]]; then
+    #     is_sequential=true
+    # fi
+    # if [[ "$is_sequential" != "true" ]] && [[ ! "$branch" =~ ^[0-9]{8}-[0-9]{6}- ]]; then
+    #     echo "ERROR: Not on a feature branch. Current branch: $raw" >&2
+    #     echo "Feature branches should be named like: 001-feature-name, 1234-feature-name, or 20260319-143022-feature-name" >&2
+    #     return 1
+    # fi
+    #
+    # return 0
+    # --------------------------------------------------------------------
 }
 
 # Safely read .specify/feature.json's "feature_directory" value.

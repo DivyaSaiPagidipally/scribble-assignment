@@ -20,7 +20,7 @@
 
 **Purpose**: Project initialization and validation
 
-- [ ] T001 Verify and install dependencies in [backend/package.json](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/package.json) and [frontend/package.json](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/package.json)
+- [x] T001 Verify and install dependencies in [backend/package.json](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/package.json) and [frontend/package.json](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/package.json)
 - [x] T002 Verify dev script execution for [backend/src/server.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/server.ts) and [frontend/src/main.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/main.tsx)
 
 ---
