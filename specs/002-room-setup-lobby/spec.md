@@ -8,6 +8,12 @@
 
 **Input**: User description: "create this feature under specs folder itself. Refer document.md and go with ### Group 1 — Room Setup & Lobby"
 
+## Clarifications
+
+### Session 2026-06-01
+- Q: What should happen to the lobby if the host player leaves or disconnects? → A: Terminate room immediately (destroy room and redirect guests).
+- Q: How should the frontend handle temporary polling failures or offline network states when waiting in the lobby? → A: Show a temporary warning banner (continue polling and dismiss on recovery).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Host Tracking on Room Creation (Priority: P1)
@@ -71,9 +77,11 @@ As the host in a lobby, I want to be the only person who can see and click the "
 ---
 
 ## Edge Cases
+- **Host Disconnection**: If the host player leaves or disconnects from the lobby, the room is immediately destroyed and all remaining participants are redirected back to the landing page.
 - **Drop Below 2 Players**: If a player leaves the lobby, bringing the count back down to 1, the "Start Game" button on the host page must become disabled again.
 - **Empty Player Name**: Submitting empty names for room creation or joining must be validated and rejected.
 - **Invalid Room Code Format**: Reentering codes that do not match the expected 4-character uppercase alphanumeric pattern should be rejected on the client side.
+- **Polling Failures**: If polling fails due to temporary network issues, a connection warning banner is displayed in the lobby while the client continues attempting to connect, disappearing once connection is restored.
 
 ## Requirements *(mandatory)*
 
@@ -84,6 +92,8 @@ As the host in a lobby, I want to be the only person who can see and click the "
 - **FR-004**: Frontend MUST poll the server status endpoint for the active room automatically at a regular ~2s interval when on the Lobby page.
 - **FR-005**: Frontend MUST restrict the visibility of the "Start Game" button in the lobby to the host only.
 - **FR-006**: Frontend MUST disable the "Start Game" button for the host when the participant count is less than 2.
+- **FR-007**: System MUST immediately terminate the room and redirect guests to the landing page if the host leaves or disconnects from the lobby.
+- **FR-008**: Frontend MUST display a temporary connection warning banner in the lobby when polling fails, and automatically hide it once connection is restored.
 
 ### Key Entities
 - **Room**: Represents a game session. Has `code` (string), `participants` (Participant[]), `status` (string), and `hostId` (string).
