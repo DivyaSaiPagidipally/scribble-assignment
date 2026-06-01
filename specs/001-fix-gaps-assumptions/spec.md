@@ -44,14 +44,14 @@ A player wants to join an existing room. They input the room code and their cust
 
 ---
 
-### User Story 4 - Lobby Participant List Polling (Priority: P2)
-Players in the lobby must see the participant list update automatically without having to manually click the refresh button.
+### User Story 4 - Lobby Participant List (Priority: P2)
+Players in the lobby must see the participant list. Manual refresh button only, no auto-polling.
 
 **Why this priority**: Essential to let players know when others have successfully joined.
-**Independent Test**: Open two browser tabs side-by-side. Join a room from Tab B and observe Tab A's participant list update within 2 seconds.
+**Independent Test**: Open two browser tabs side-by-side. Join a room from Tab B, click the refresh button on Tab A, and verify Tab A's participant list updates.
 
 **Acceptance Scenarios**:
-1. **Given** a player is on the Lobby page, **When** another player joins the room, **Then** the Lobby page polls the server and displays the updated participant list automatically within 2 seconds.
+1. **Given** a player is on the Lobby page, **When** another player joins the room, **Then** the Lobby page polls the server and displays the updated participant list on manual refresh.
 
 ---
 
@@ -68,7 +68,7 @@ Players in the lobby must see the participant list update automatically without 
 - **FR-003**: System MUST propagate the custom player name to the backend during room creation and room joining rather than defaulting to "Player".
 - **FR-004**: System MUST validate the room code on join, rejecting non-existent codes with clear error messages.
 - **FR-005**: System MUST isolate different rooms such that participant lists do not mix.
-- **FR-006**: Frontend MUST poll the server status endpoint for the active room every 2 seconds when on the Lobby page.
+- **FR-006**: Frontend MUST poll the server status endpoint for the active room on manual refresh when on the Lobby page.
 
 ### Key Entities
 - **Room**: Represents a game session. Has `code` (string), `participants` (Participant[]), and `status` (string).
@@ -78,7 +78,7 @@ Players in the lobby must see the participant list update automatically without 
 
 ### Measurable Outcomes
 - **SC-001**: The landing page loads and makes requests to the correct API base URL without 404 errors.
-- **SC-002**: Lobby updates and displays newly joined participants within 2 seconds.
+- **SC-002**: Lobby updates and displays newly joined participants on manual refresh.
 - **SC-003**: Empty name inputs are rejected with a visible validation error in < 200ms.
 
 ## Assumptions
