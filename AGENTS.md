@@ -43,5 +43,5 @@ You are working on a monolithic repository for a multiplayer drawing game ("Scri
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan: specs/001-fix-gaps-assumptions/plan.md
+shell commands, and other important information, read the current plan: specs/002-room-setup-lobby/plan.md
 <!-- SPECKIT END -->
