@@ -20,7 +20,7 @@ export interface Guess {
 
 export interface RoomSnapshot {
   code: string;
-  status: "lobby" | "game";
+  status: "lobby" | "game" | "result";
   participants: Participant[];
   availableWords: string[];
   roles: ParticipantRole[];
@@ -100,6 +100,18 @@ export const api = {
     return request<{ success: boolean; guess: Guess }>(`/rooms/${encodeURIComponent(code)}/guesses`, {
       method: "POST",
       body: JSON.stringify({ participantId, guessText })
+    });
+  },
+  endRound(code: string, participantId: string) {
+    return request<{ success: boolean; status: string }>(`/rooms/${encodeURIComponent(code)}/end`, {
+      method: "POST",
+      body: JSON.stringify({ participantId })
+    });
+  },
+  restartGame(code: string, participantId: string) {
+    return request<{ success: boolean; status: string }>(`/rooms/${encodeURIComponent(code)}/restart`, {
+      method: "POST",
+      body: JSON.stringify({ participantId })
     });
   }
 };

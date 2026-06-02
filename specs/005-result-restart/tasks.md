@@ -20,8 +20,8 @@
 
 **Purpose**: Verification of current codebase status before implementing new features
 
-- [ ] T001 Verify existing setup by running dev build of frontend and backend
-- [ ] T002 Ensure linting and tests pass on existing code
+- [x] T001 Verify existing setup by running dev build of frontend and backend
+- [x] T002 Ensure linting and tests pass on existing code
 
 ---
 
@@ -31,7 +31,7 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Extend RoomStatus type in [backend/src/models/game.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/models/game.ts) and RoomSnapshot["status"] type in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts) to support `"result"`
+- [x] T003 Extend RoomStatus type in [backend/src/models/game.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/models/game.ts) and RoomSnapshot["status"] type in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts) to support `"result"`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -45,12 +45,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T004 [P] [US1] Implement `endRound` room state update and write unit tests in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts) and [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T005 [P] [US1] Implement auto-ending logic in `submitGuess` (transition to `"result"` when all guessers guess correctly) and write unit tests in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts) and [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T006 [US1] Add `POST /api/rooms/:code/end` endpoint in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
-- [ ] T007 [US1] Expose `secretWord` on the snapshot mapping for all roles when status is `"result"` in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T008 [US1] Expose `endRound` API endpoint call in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
-- [ ] T009 [US1] Mount "End Round" button for Host when game is active, and build Results dashboard layout when room status is `"result"` in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
+- [x] T004 [P] [US1] Implement `endRound` room state update and write unit tests in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts) and [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T005 [P] [US1] Implement auto-ending logic in `submitGuess` (transition to `"result"` when all guessers guess correctly) and write unit tests in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts) and [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T006 [US1] Add `POST /api/rooms/:code/end` endpoint in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
+- [x] T007 [US1] Expose `secretWord` on the snapshot mapping for all roles when status is `"result"` in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T008 [US1] Expose `endRound` API endpoint call in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
+- [x] T009 [US1] Mount "End Round" button for Host when game is active, and build Results dashboard layout when room status is `"result"` in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
 
 **Checkpoint**: Game round ends manually or automatically, transitioning all players to a shared results dashboard revealing the correct word.
 
@@ -64,11 +64,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T010 [P] [US2] Implement `restartGame` room cleanup and write unit tests in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts) and [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T011 [US2] Add `POST /api/rooms/:code/restart` endpoint in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
-- [ ] T012 [US2] Expose `restartGame` API endpoint call in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
-- [ ] T013 [US2] Render "Restart Game" button for Host and waiting indicator for guests on results dashboard in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
-- [ ] T014 [US2] Add redirect effect on GamePage to navigate back to `/lobby` if room status becomes `"lobby"` in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
+- [x] T010 [P] [US2] Implement `restartGame` room cleanup and write unit tests in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts) and [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T011 [US2] Add `POST /api/rooms/:code/restart` endpoint in [backend/src/api/rooms.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/rooms.ts)
+- [x] T012 [US2] Expose `restartGame` API endpoint call in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
+- [x] T013 [US2] Render "Restart Game" button for Host and waiting indicator for guests on results dashboard in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
+- [x] T014 [US2] Add redirect effect on GamePage to navigate back to `/lobby` if room status becomes `"lobby"` in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
 
 **Checkpoint**: Host triggers restart, status resets to lobby, player scores/roles clear, and all clients redirect back to Lobby.
 
@@ -78,8 +78,8 @@
 
 **Purpose**: General codebase formatting, type-safety, and validation check
 
-- [ ] T015 Code cleanup, formatting, and linting checks across modified files
-- [ ] T016 Complete full manual verification walkthrough using multiple tabs/browsers
+- [x] T015 Code cleanup, formatting, and linting checks across modified files
+- [x] T016 Complete full manual verification walkthrough using multiple tabs/browsers
 
 ---
 

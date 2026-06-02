@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom, updateDrawing, clearDrawing, submitGuess } from "./roomStore.js";
+import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom, updateDrawing, clearDrawing, submitGuess, endRound, restartGame } from "./roomStore.js";
 
 describe("roomStore", () => {
   it("createRoom returns a room with a 4-character uppercase code", () => {
@@ -252,6 +252,7 @@ describe("roomStore", () => {
     const hostId = created.participantId;
     const joined = joinRoom(code, "Bob");
     const guestId = joined.participantId as string;
+    joinRoom(code, "Charlie");
 
     startGame(code, hostId);
 
@@ -291,5 +292,73 @@ describe("roomStore", () => {
     room = getRoom(code)!;
     expect(room.round!.guesses).toHaveLength(3);
     expect(room.participants.find((p) => p.id === guestId)!.score).toBe(100);
+  });
+
+  it("allows host to end round, blocks non-host, and auto-ends when guessers are correct", () => {
+    const created = createRoom("Alice");
+    const code = created.room.code;
+    const hostId = created.participantId;
+    const joined = joinRoom(code, "Bob");
+    const guestId = joined.participantId as string;
+
+    startGame(code, hostId);
+
+    // Guest attempts to end round (blocked)
+    const guestEnd = endRound(code, guestId);
+    expect(guestEnd.success).toBe(false);
+
+    // Host ends round (succeeds)
+    const hostEnd = endRound(code, hostId);
+    expect(hostEnd.success).toBe(true);
+
+    let room = getRoom(code)!;
+    expect(room.status).toBe("result");
+
+    // Check snapshot reveals secret word to everyone on results status
+    const guestSnapshot = toRoomSnapshot(room, guestId);
+    expect(guestSnapshot.secretWord).toBe("rocket");
+
+    // Restart game back to lobby and test auto-ending
+    restartGame(code, hostId);
+    startGame(code, hostId);
+
+    // Now guess correctly as Bob. Since Bob is the only guesser, the round should automatically end.
+    const guessResult = submitGuess(code, guestId, "rocket");
+    expect(guessResult.success).toBe(true);
+
+    room = getRoom(code)!;
+    expect(room.status).toBe("result"); // Auto ended!
+  });
+
+  it("allows host to restart game, blocks non-host, and resets states", () => {
+    const created = createRoom("Alice");
+    const code = created.room.code;
+    const hostId = created.participantId;
+    const joined = joinRoom(code, "Bob");
+    const guestId = joined.participantId as string;
+
+    startGame(code, hostId);
+    submitGuess(code, guestId, "rocket"); // Bob gets 100 points
+    endRound(code, hostId);
+
+    // Guest tries to restart (blocked)
+    const guestRestart = restartGame(code, guestId);
+    expect(guestRestart.success).toBe(false);
+
+    // Host restarts (succeeds)
+    const hostRestart = restartGame(code, hostId);
+    expect(hostRestart.success).toBe(true);
+
+    const room = getRoom(code)!;
+    expect(room.status).toBe("lobby");
+    expect(room.round).toBeUndefined();
+
+    // Scores and roles reset to lobby defaults
+    const host = room.participants.find(p => p.id === hostId);
+    const guest = room.participants.find(p => p.id === guestId);
+    expect(host!.score).toBe(0);
+    expect(host!.role).toBeUndefined();
+    expect(guest!.score).toBe(0);
+    expect(guest!.role).toBeUndefined();
   });
 });

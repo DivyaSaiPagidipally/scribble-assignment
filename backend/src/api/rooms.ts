@@ -10,7 +10,7 @@ import {
   drawingSchema,
   guessSchema
 } from "./schemas.js";
-import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom, updateDrawing, clearDrawing, submitGuess } from "../services/roomStore.js";
+import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom, updateDrawing, clearDrawing, submitGuess, endRound, restartGame } from "../services/roomStore.js";
 
 export function createRoomsRouter() {
   const router = Router();
@@ -137,6 +137,40 @@ export function createRoomsRouter() {
         throw new HttpError(statusCode, result.error ?? "Failed to submit guess");
       }
       response.json({ success: true, guess: result.guess });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/end", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const { participantId } = startGameSchema.parse(request.body);
+
+      const result = endRound(code, participantId);
+      if (!result.success) {
+        const statusCode = result.error?.includes("Only the host") ? 403 : 400;
+        throw new HttpError(statusCode, result.error ?? "Failed to end round");
+      }
+
+      response.json({ success: true, status: "result" });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/restart", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const { participantId } = startGameSchema.parse(request.body);
+
+      const result = restartGame(code, participantId);
+      if (!result.success) {
+        const statusCode = result.error?.includes("Only the host") ? 403 : 400;
+        throw new HttpError(statusCode, result.error ?? "Failed to restart game");
+      }
+
+      response.json({ success: true, status: "lobby" });
     } catch (error) {
       next(error);
     }

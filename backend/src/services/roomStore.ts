@@ -237,10 +237,56 @@ export function submitGuess(code: string, participantId: string, guessText: stri
   };
 
   room.round.guesses.push(guess);
+
+  // Check if all guessers have successfully guessed the word
+  const guessers = room.participants.filter((p) => p.role === "guesser");
+  const uniqueCorrectGuessers = new Set(
+    room.round.guesses.filter((g) => g.isCorrect).map((g) => g.playerName)
+  );
+  if (guessers.length > 0 && uniqueCorrectGuessers.size >= guessers.length) {
+    room.status = "result";
+  }
+
   room.updatedAt = now();
   rooms.set(room.code, room);
 
   return { success: true, guess };
+}
+
+export function endRound(code: string, participantId: string): { success: boolean; error?: string } {
+  const room = rooms.get(code.trim().toUpperCase());
+  if (!room) {
+    return { success: false, error: "Room not found" };
+  }
+  if (room.hostId !== participantId) {
+    return { success: false, error: "Only the host can end the round" };
+  }
+  if (room.status !== "game") {
+    return { success: false, error: "Game is not in progress" };
+  }
+  room.status = "result";
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+  return { success: true };
+}
+
+export function restartGame(code: string, participantId: string): { success: boolean; error?: string } {
+  const room = rooms.get(code.trim().toUpperCase());
+  if (!room) {
+    return { success: false, error: "Room not found" };
+  }
+  if (room.hostId !== participantId) {
+    return { success: false, error: "Only the host can restart the game" };
+  }
+  room.status = "lobby";
+  room.round = undefined;
+  room.participants.forEach((p) => {
+    p.role = undefined;
+    p.score = 0;
+  });
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+  return { success: true };
 }
 
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
@@ -260,10 +306,10 @@ export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSn
     roles: [...STARTER_ROLES]
   };
 
-  if (room.status === "game" && room.round) {
+  if ((room.status === "game" || room.status === "result") && room.round) {
     snapshot.drawingData = room.round.drawingData;
     snapshot.guesses = room.round.guesses;
-    if (isDrawer) {
+    if (isDrawer || room.status === "result") {
       snapshot.secretWord = room.round.secretWord;
     }
   }

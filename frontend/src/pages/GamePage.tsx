@@ -54,6 +54,12 @@ export function GamePage() {
     };
   }, [navigate, roomCode, roomStore]);
 
+  useEffect(() => {
+    if (room?.status === "lobby") {
+      navigate("/lobby");
+    }
+  }, [navigate, room?.status]);
+
   const viewer = room?.participants.find((participant) => participant.id === participantId) ?? null;
 
   // Prevent scrolling when drawing on touch screens
@@ -180,6 +186,26 @@ export function GamePage() {
     await roomStore.fetchRoom();
   }
 
+  async function handleEndRound() {
+    if (!roomCode || !participantId) return;
+    try {
+      await api.endRound(roomCode, participantId);
+      await roomStore.fetchRoom();
+    } catch (err) {
+      console.error("Failed to end round:", err);
+    }
+  }
+
+  async function handleRestartGame() {
+    if (!roomCode || !participantId) return;
+    try {
+      await api.restartGame(roomCode, participantId);
+      await roomStore.fetchRoom();
+    } catch (err) {
+      console.error("Failed to restart game:", err);
+    }
+  }
+
   const viewerHasCorrectGuess = room.guesses?.some(
     (g) => g.playerName === viewer?.name && g.isCorrect
   ) ?? false;
@@ -206,7 +232,109 @@ export function GamePage() {
         </aside>
 
         <div className="game-page__main">
-          {viewer?.role === "drawer" ? (
+          {room.status === "result" ? (
+            <Card title="Round Results">
+              <div style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "40px 24px",
+                textAlign: "center"
+              }}>
+                <div style={{
+                  fontSize: "2.5rem",
+                  marginBottom: "16px",
+                  animation: "bounce 2s infinite"
+                }}>
+                  🏆
+                </div>
+                <h2 style={{
+                  fontSize: "1.75rem",
+                  fontWeight: "800",
+                  color: "var(--brand-strong)",
+                  marginBottom: "8px",
+                  background: "linear-gradient(to right, #4f46e5, #818cf8)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent"
+                }}>
+                  Round Ended!
+                </h2>
+                <p style={{
+                  fontSize: "1rem",
+                  color: "#4b5563",
+                  marginBottom: "24px"
+                }}>
+                  Here is how everyone performed.
+                </p>
+                
+                <div style={{
+                  background: "#e0e7ff",
+                  border: "2px dashed #818cf8",
+                  borderRadius: "12px",
+                  padding: "20px 40px",
+                  marginBottom: "32px"
+                }}>
+                  <span style={{
+                    fontSize: "0.875rem",
+                    color: "#4f46e5",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    fontWeight: "600",
+                    display: "block",
+                    marginBottom: "4px"
+                  }}>
+                    The secret word was
+                  </span>
+                  <span style={{
+                    fontSize: "2.5rem",
+                    fontWeight: "900",
+                    color: "#312e81",
+                    textTransform: "uppercase",
+                    letterSpacing: "2px"
+                  }}>
+                    {room.secretWord}
+                  </span>
+                </div>
+
+                {viewer?.isHost ? (
+                  <div style={{ width: "100%", maxWidth: "320px" }}>
+                    <button
+                      className="button button--primary"
+                      style={{
+                        width: "100%",
+                        padding: "12px 24px",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        boxShadow: "0 4px 6px -1px rgba(79, 70, 229, 0.2)"
+                      }}
+                      onClick={handleRestartGame}
+                    >
+                      Restart Game
+                    </button>
+                    <p style={{ fontSize: "0.875rem", color: "#6b7280", marginTop: "8px" }}>
+                      As the host, you can start a new round.
+                    </p>
+                  </div>
+                ) : (
+                  <div style={{
+                    padding: "12px 24px",
+                    background: "#f3f4f6",
+                    borderRadius: "8px",
+                    color: "#4b5563",
+                    fontSize: "0.875rem",
+                    fontWeight: "500",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px"
+                  }}>
+                    <span className="spinner"></span>
+                    Waiting for host to restart...
+                  </div>
+                )}
+              </div>
+            </Card>
+          ) : viewer?.role === "drawer" ? (
             <Card title="Canvas">
               <canvas
                 ref={canvasRef}
@@ -290,12 +418,12 @@ export function GamePage() {
               </div>
               <div>
                 <dt>Status</dt>
-                <dd>Playing</dd>
+                <dd>{room.status === "result" ? "Round Ended" : "Playing"}</dd>
               </div>
             </dl>
           </Card>
 
-          {viewer?.role === "drawer" && room.secretWord && (
+          {room.status === "game" && viewer?.role === "drawer" && room.secretWord && (
             <Card title="Secret Word">
               <div style={{ textAlign: "center", padding: "16px 0" }}>
                 <span style={{ fontSize: "2rem", fontWeight: "bold", letterSpacing: "2px", color: "#3730a3", textTransform: "uppercase" }}>
@@ -308,7 +436,7 @@ export function GamePage() {
             </Card>
           )}
 
-          {viewer?.role === "guesser" && (
+          {room.status === "game" && viewer?.role === "guesser" && (
             <Card title="Your Guess">
               {viewerHasCorrectGuess ? (
                 <div style={{ textAlign: "center", padding: "16px 0", color: "#15803d", fontWeight: "600" }}>
@@ -322,10 +450,15 @@ export function GamePage() {
         </aside>
       </div>
 
-      <div className="button-row">
+      <div className="button-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <button className="button button--secondary" onClick={() => navigate("/lobby")}>
           Exit Game
         </button>
+        {room.status === "game" && viewer?.isHost && (
+          <button className="button button--primary" onClick={handleEndRound}>
+            End Round
+          </button>
+        )}
       </div>
     </section>
   );
