@@ -1,113 +1,89 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: Game Start & Drawer Flow
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Branch**: `003-game-start-drawer-flow` | **Date**: 2026-06-02 | **Spec**: [spec.md](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/specs/003-game-start-drawer-flow/spec.md)
 
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit-plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
+**Input**: Feature specification from `/specs/003-game-start-drawer-flow/spec.md`
 
 ## Summary
-
-[Extract from feature spec: primary requirement + technical approach from research]
+Implement transitioning the drawing room status from `"lobby"` to `"game"` when the host starts the session. This includes:
+1. Validating player names cleanly at the input boundaries.
+2. Dynamically assigning roles (`drawer` and `guesser`) based on host status.
+3. Deterministically selecting `"rocket"` as the starting round secret word.
+4. Implementing role-based snapshot filtering in `toRoomSnapshot` to restrict secret word visibility to the drawer client only.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
+**Language/Version**: Node.js v18+, TypeScript v5+
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Primary Dependencies**: Express, React, React Router, Vite, Zod
 
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Storage**: In-memory isolated storage (`Map<string, Room>` in roomStore)
 
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Testing**: Vitest for unit and validation testing
 
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
+**Target Platform**: Modern web browsers (frontend) and Node.js (backend server)
 
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: Full-stack multi-player web application
 
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
+**Performance Goals**:
+- Form validation error response under 200ms
+- Game transitions visible across clients within 2.5s (constrained by 2s polling intervals)
 
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
-
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
-
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Constraints**:
+- Strictly in-memory storage (no DB)
+- Pure HTTP polling (no WebSockets)
+- Zero secretWord leakage on guest/guesser snapshots
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **TypeScript Strict Mode**: ✅ Strict compilation enabled. Types are explicit. No `any` used.
+- **Functional React Components**: ✅ All pages (CreateRoomPage, JoinRoomPage, LobbyPage, GamePage) are functional components using hooks.
+- **80% Test Coverage Requirement**: ✅ Core business logic in `roomStore` and `schemas` has dedicated unit test suites.
+- **Pure HTTP Polling & Single-Round Scope**: ✅ Client uses 2s auto-polling cadence. WebSockets are strictly forbidden. No multi-round state storage in v1.
+- **In-Memory Isolated Storage**: ✅ Session storage is completely in-memory, keyed by room code. Host departure deletes the room.
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/[###-feature]/
-├── plan.md              # This file (/speckit-plan command output)
-├── research.md          # Phase 0 output (/speckit-plan command)
-├── data-model.md        # Phase 1 output (/speckit-plan command)
-├── quickstart.md        # Phase 1 output (/speckit-plan command)
-├── contracts/           # Phase 1 output (/speckit-plan command)
-└── tasks.md             # Phase 2 output (/speckit-tasks command - NOT created by /speckit-plan)
+specs/003-game-start-drawer-flow/
+├── plan.md              # This file
+├── research.md          # Technical decisions and rationale
+├── data-model.md        # Extended entities and interfaces
+└── tasks.md             # Ordered checklists and dependencies
 ```
 
-### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
+### Source Code
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
 backend/
 ├── src/
 │   ├── models/
+│   │   └── game.ts      # Extended Participant, Room, RoomSnapshot types
 │   ├── services/
+│   │   └── roomStore.ts # Core role assignment and filtering logic
 │   └── api/
-└── tests/
+│       ├── rooms.ts     # Route handlers for create, join, start, leave
+│       └── schemas.ts   # Zod validation rules
+└── src/services/roomStore.test.ts
 
 frontend/
 ├── src/
-│   ├── components/
+│   ├── components/      # Common Card, Badges, GuessForm components
 │   ├── pages/
+│   │   ├── CreateRoomPage.tsx
+│   │   ├── JoinRoomPage.tsx
+│   │   ├── LobbyPage.tsx
+│   │   └── GamePage.tsx # Role display and secretWord render logic
 │   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+│       └── api.ts       # Shared TypeScript models and client requests
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Web application layout (Option 2) matching backend/ and frontend/ directories in repository root.
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
-
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+No constitution violations detected or complexity overrides needed.
