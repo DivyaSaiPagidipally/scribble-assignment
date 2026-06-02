@@ -37,6 +37,18 @@ export const leaveRoomSchema = z.object({
   participantId: z.string().trim().min(1, { message: "Participant ID is required" })
 });
 
+export const drawingSchema = z.object({
+  drawingData: z.string()
+});
+
+export const guessSchema = z.object({
+  participantId: z.string().trim().min(1, { message: "Participant ID is required" }),
+  guessText: z
+    .string()
+    .trim()
+    .min(1, { message: "Guess text must not be empty" })
+});
+
 export class HttpError extends Error {
   statusCode: number;
 

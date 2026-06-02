@@ -7,11 +7,23 @@ export interface Participant {
   joinedAt: string;
   role?: ParticipantRole;
   isHost?: boolean;
+  score?: number;
+}
+
+export interface Guess {
+  id: string;
+  playerName: string;
+  text: string;
+  isCorrect: boolean;
+  scoreAwarded: number;
+  timestamp: string;
 }
 
 export interface GameRound {
   secretWord: string;
   startedAt: string;
+  drawingData?: string;
+  guesses: Guess[];
 }
 
 export interface Room {
@@ -31,6 +43,8 @@ export interface RoomSnapshot {
   availableWords: string[];
   roles: ParticipantRole[];
   secretWord?: string;
+  drawingData?: string;
+  guesses?: Guess[];
 }
 
 export interface RoomSessionResponse {

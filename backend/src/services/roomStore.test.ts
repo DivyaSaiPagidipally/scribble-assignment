@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom } from "./roomStore.js";
+import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom, updateDrawing, clearDrawing, submitGuess } from "./roomStore.js";
 
 describe("roomStore", () => {
   it("createRoom returns a room with a 4-character uppercase code", () => {
@@ -201,5 +201,95 @@ describe("roomStore", () => {
     // Anonymous viewer snapshot: should not contain secretWord
     const anonSnapshot = toRoomSnapshot(room);
     expect(anonSnapshot.secretWord).toBeUndefined();
+  });
+
+  it("initializes participant score to 0 on creation", () => {
+    const created = createRoom("Alice");
+    expect(created.room.participants[0].score).toBe(0);
+
+    const joined = joinRoom(created.room.code, "Bob");
+    expect(joined.room!.participants[1].score).toBe(0);
+  });
+
+  it("updates and clears drawing data on a game room", () => {
+    const created = createRoom("Alice");
+    const code = created.room.code;
+    const hostId = created.participantId;
+    joinRoom(code, "Bob");
+
+    // Before game starts, updateDrawing should fail or room shouldn't be in game
+    const preUpdateResult = updateDrawing(code, "data:image/png;base64,123");
+    expect(preUpdateResult.success).toBe(false);
+
+    startGame(code, hostId);
+
+    // After starting, drawing is initially empty
+    let room = getRoom(code)!;
+    expect(room.round!.drawingData).toBe("");
+
+    // Update drawing
+    const updateResult = updateDrawing(code, "data:image/png;base64,123");
+    expect(updateResult.success).toBe(true);
+
+    room = getRoom(code)!;
+    expect(room.round!.drawingData).toBe("data:image/png;base64,123");
+
+    // toRoomSnapshot should include drawingData
+    const snapshot = toRoomSnapshot(room, hostId);
+    expect(snapshot.drawingData).toBe("data:image/png;base64,123");
+
+    // Clear drawing
+    const clearResult = clearDrawing(code);
+    expect(clearResult.success).toBe(true);
+
+    room = getRoom(code)!;
+    expect(room.round!.drawingData).toBe("");
+  });
+
+  it("submitGuess validates and processes guesses, awarding score once", () => {
+    const created = createRoom("Alice");
+    const code = created.room.code;
+    const hostId = created.participantId;
+    const joined = joinRoom(code, "Bob");
+    const guestId = joined.participantId as string;
+
+    startGame(code, hostId);
+
+    // Host (drawer) attempts to guess (rejected)
+    const hostGuessResult = submitGuess(code, hostId, "rocket");
+    expect(hostGuessResult.success).toBe(false);
+    expect(hostGuessResult.error).toBe("Drawer cannot submit guesses");
+
+    // Guest submits incorrect guess
+    let result = submitGuess(code, guestId, "pizza");
+    expect(result.success).toBe(true);
+    expect(result.guess!.isCorrect).toBe(false);
+    expect(result.guess!.scoreAwarded).toBe(0);
+    expect(result.guess!.text).toBe("pizza");
+
+    let room = getRoom(code)!;
+    expect(room.round!.guesses).toHaveLength(1);
+    expect(room.participants.find((p) => p.id === guestId)!.score).toBe(0);
+
+    // Guest submits correct guess with spaces and casing
+    result = submitGuess(code, guestId, "   RoCkeT  ");
+    expect(result.success).toBe(true);
+    expect(result.guess!.isCorrect).toBe(true);
+    expect(result.guess!.scoreAwarded).toBe(100);
+    expect(result.guess!.text).toBe("RoCkeT");
+
+    room = getRoom(code)!;
+    expect(room.round!.guesses).toHaveLength(2);
+    expect(room.participants.find((p) => p.id === guestId)!.score).toBe(100);
+
+    // Guest submits correct guess again (double scoring prevented)
+    result = submitGuess(code, guestId, "rocket");
+    expect(result.success).toBe(true);
+    expect(result.guess!.isCorrect).toBe(true);
+    expect(result.guess!.scoreAwarded).toBe(0);
+
+    room = getRoom(code)!;
+    expect(room.round!.guesses).toHaveLength(3);
+    expect(room.participants.find((p) => p.id === guestId)!.score).toBe(100);
   });
 });

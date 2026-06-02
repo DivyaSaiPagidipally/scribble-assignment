@@ -6,9 +6,11 @@ import {
   roomCodeParamsSchema,
   roomViewerQuerySchema,
   startGameSchema,
-  leaveRoomSchema
+  leaveRoomSchema,
+  drawingSchema,
+  guessSchema
 } from "./schemas.js";
-import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom } from "../services/roomStore.js";
+import { createRoom, getRoom, joinRoom, toRoomSnapshot, startGame, leaveRoom, updateDrawing, clearDrawing, submitGuess } from "../services/roomStore.js";
 
 export function createRoomsRouter() {
   const router = Router();
@@ -93,6 +95,48 @@ export function createRoomsRouter() {
       }
 
       response.json({ success: true, message: "Left room successfully" });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/canvas", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const { drawingData } = drawingSchema.parse(request.body);
+      const result = updateDrawing(code, drawingData);
+      if (!result.success) {
+        throw new HttpError(400, result.error ?? "Failed to update drawing");
+      }
+      response.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/canvas/clear", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const result = clearDrawing(code);
+      if (!result.success) {
+        throw new HttpError(400, result.error ?? "Failed to clear drawing");
+      }
+      response.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:code/guesses", (request, response, next) => {
+    try {
+      const { code } = roomCodeParamsSchema.parse(request.params);
+      const { participantId, guessText } = guessSchema.parse(request.body);
+      const result = submitGuess(code, participantId, guessText);
+      if (!result.success) {
+        const statusCode = result.error?.includes("not found") ? 404 : 400;
+        throw new HttpError(statusCode, result.error ?? "Failed to submit guess");
+      }
+      response.json({ success: true, guess: result.guess });
     } catch (error) {
       next(error);
     }

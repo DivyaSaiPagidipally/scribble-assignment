@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { Participant, Room, RoomSnapshot } from "../models/game.js";
+import type { Participant, Room, RoomSnapshot, Guess } from "../models/game.js";
 import { STARTER_ROLES, STARTER_WORDS } from "../seed/starterData.js";
 
 const rooms = new Map<string, Room>();
@@ -37,7 +37,8 @@ function createParticipant(name?: string): Participant {
   return {
     id: randomUUID(),
     name: displayName(name),
-    joinedAt: now()
+    joinedAt: now(),
+    score: 0
   };
 }
 
@@ -126,7 +127,9 @@ export function startGame(code: string, participantId: string): { success: boole
   room.status = "game";
   room.round = {
     secretWord: STARTER_WORDS[0], // "rocket"
-    startedAt: now()
+    startedAt: now(),
+    drawingData: "",
+    guesses: []
   };
   room.updatedAt = now();
   rooms.set(room.code, room);
@@ -155,6 +158,91 @@ export function leaveRoom(code: string, participantId: string): { success: boole
   return { success: false, error: "Participant not found" };
 }
 
+export function updateDrawing(code: string, drawingData: string): { success: boolean; error?: string } {
+  const room = rooms.get(code.trim().toUpperCase());
+  if (!room) {
+    return { success: false, error: "Room not found" };
+  }
+  if (room.status !== "game") {
+    return { success: false, error: "Room is not in game" };
+  }
+  if (!room.round) {
+    return { success: false, error: "Game round not started" };
+  }
+  room.round.drawingData = drawingData;
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+  return { success: true };
+}
+
+export function clearDrawing(code: string): { success: boolean; error?: string } {
+  const room = rooms.get(code.trim().toUpperCase());
+  if (!room) {
+    return { success: false, error: "Room not found" };
+  }
+  if (room.status !== "game") {
+    return { success: false, error: "Room is not in game" };
+  }
+  if (!room.round) {
+    return { success: false, error: "Game round not started" };
+  }
+  room.round.drawingData = "";
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+  return { success: true };
+}
+
+export function submitGuess(code: string, participantId: string, guessText: string): { success: boolean; guess?: Guess; error?: string } {
+  const room = rooms.get(code.trim().toUpperCase());
+  if (!room) {
+    return { success: false, error: "Room not found" };
+  }
+  if (room.status !== "game") {
+    return { success: false, error: "Room is not in game" };
+  }
+  if (!room.round) {
+    return { success: false, error: "Game round not started" };
+  }
+
+  const participant = room.participants.find((p) => p.id === participantId);
+  if (!participant) {
+    return { success: false, error: "Participant not found" };
+  }
+
+  if (participant.role === "drawer") {
+    return { success: false, error: "Drawer cannot submit guesses" };
+  }
+
+  const normalizedGuess = guessText.trim().toLowerCase();
+  const normalizedSecret = room.round.secretWord.trim().toLowerCase();
+  const isCorrect = normalizedGuess === normalizedSecret;
+
+  const alreadyGuessedCorrectly = room.round.guesses.some(
+    (g) => g.playerName === participant.name && g.isCorrect
+  );
+
+  let scoreAwarded = 0;
+  if (isCorrect && !alreadyGuessedCorrectly) {
+    participant.score = (participant.score ?? 0) + 100;
+    scoreAwarded = 100;
+  }
+
+  const guess: Guess = {
+    id: randomUUID(),
+    playerName: participant.name,
+    text: guessText.trim(),
+    isCorrect,
+    scoreAwarded,
+    timestamp: now()
+  };
+
+  room.round.guesses.push(guess);
+  room.updatedAt = now();
+  rooms.set(room.code, room);
+
+  return { success: true, guess };
+}
+
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
   const isDrawer = viewerParticipantId
     ? room.participants.some((p) => p.id === viewerParticipantId && p.role === "drawer")
@@ -172,8 +260,12 @@ export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSn
     roles: [...STARTER_ROLES]
   };
 
-  if (room.status === "game" && room.round && isDrawer) {
-    snapshot.secretWord = room.round.secretWord;
+  if (room.status === "game" && room.round) {
+    snapshot.drawingData = room.round.drawingData;
+    snapshot.guesses = room.round.guesses;
+    if (isDrawer) {
+      snapshot.secretWord = room.round.secretWord;
+    }
   }
 
   return snapshot;
