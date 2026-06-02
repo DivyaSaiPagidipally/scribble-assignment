@@ -25,7 +25,7 @@ describe("roomStore", () => {
     expect(aliceSnapshot.isHost).toBe(true);
 
     const joined = joinRoom(room.code, "Bob");
-    expect(joined).not.toBeNull();
+    expect(joined.success).toBe(true);
     const bobId = joined!.participantId;
     const updatedRoom = getRoom(room.code)!;
 
@@ -43,19 +43,20 @@ describe("roomStore", () => {
     expect(result.room.participants[0].name).toBe("Player");
   });
 
-  it("joinRoom returns null for an unknown room code", () => {
+  it("joinRoom returns error for an unknown room code", () => {
     const result = joinRoom("ZZZZ", "Bob");
 
-    expect(result).toBeNull();
+    expect(result.success).toBe(false);
+    expect(result.error).toBe("Room not found");
   });
 
   it("joinRoom adds a participant with a trimmed custom name to an existing room", () => {
     const created = createRoom("Alice");
     const result = joinRoom(created.room.code, "  Bob  ");
 
-    expect(result).not.toBeNull();
-    expect(result!.room.participants).toHaveLength(2);
-    expect(result!.room.participants[1].name).toBe("Bob");
+    expect(result.success).toBe(true);
+    expect(result.room!.participants).toHaveLength(2);
+    expect(result.room!.participants[1].name).toBe("Bob");
   });
 
   it("roomStore isolates different rooms", () => {
@@ -81,8 +82,8 @@ describe("roomStore", () => {
     const code = created.room.code;
 
     const result = joinRoom(" " + code.toLowerCase() + " ", "Bob");
-    expect(result).not.toBeNull();
-    expect(result!.room.participants).toHaveLength(2);
+    expect(result.success).toBe(true);
+    expect(result.room!.participants).toHaveLength(2);
 
     const room = getRoom(code.toLowerCase())!;
     expect(room.participants).toHaveLength(2);
@@ -101,8 +102,8 @@ describe("roomStore", () => {
 
     // Add guest
     const joined = joinRoom(code, "Bob");
-    expect(joined).not.toBeNull();
-    const guestId = joined!.participantId;
+    expect(joined.success).toBe(true);
+    const guestId = joined.participantId as string;
 
     // Try starting as guest (fails)
     const result2 = startGame(code, guestId);
@@ -123,8 +124,8 @@ describe("roomStore", () => {
     const hostId = created.participantId;
 
     const joined = joinRoom(code, "Bob");
-    expect(joined).not.toBeNull();
-    const guestId = joined!.participantId;
+    expect(joined.success).toBe(true);
+    const guestId = joined.participantId as string;
 
     // Guest leaves (removed, room still exists)
     const leaveGuestResult = leaveRoom(code, guestId);
@@ -135,5 +136,27 @@ describe("roomStore", () => {
     const leaveHostResult = leaveRoom(code, hostId);
     expect(leaveHostResult.success).toBe(true);
     expect(getRoom(code)).toBeNull();
+  });
+  it("joinRoom returns error when room is already in game", () => {
+    const created = createRoom("Alice");
+    const code = created.room.code;
+    const hostId = created.participantId;
+
+    // Add a guest
+    const joined = joinRoom(code, "Bob");
+    expect(joined.success).toBe(true);
+
+    // Start the game
+    const startResult = startGame(code, hostId);
+    expect(startResult.success).toBe(true);
+
+    // Try to join after game has started
+    const joinAfterStart = joinRoom(code, "Charlie");
+    expect(joinAfterStart.success).toBe(false);
+    expect(joinAfterStart.error).toBe("Room is already in game");
+
+    // Verify room still has only 2 participants
+    const room = getRoom(code)!;
+    expect(room.participants).toHaveLength(2);
   });
 });

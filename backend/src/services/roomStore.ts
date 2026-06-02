@@ -68,11 +68,15 @@ export function createRoom(playerName?: string) {
   };
 }
 
-export function joinRoom(code: string, playerName?: string) {
+export function joinRoom(code: string, playerName?: string): { success: boolean; participantId?: string; room?: Room; error?: string } {
   const room = rooms.get(code.trim().toUpperCase());
 
   if (!room) {
-    return null;
+    return { success: false, error: "Room not found" };
+  }
+
+  if (room.status === "game") {
+    return { success: false, error: "Room is already in game" };
   }
 
   const participant = createParticipant(playerName);
@@ -81,8 +85,9 @@ export function joinRoom(code: string, playerName?: string) {
   rooms.set(room.code, room);
 
   return {
-    room: cloneRoom(room),
-    participantId: participant.id
+    success: true,
+    participantId: participant.id,
+    room: cloneRoom(room)
   };
 }
 

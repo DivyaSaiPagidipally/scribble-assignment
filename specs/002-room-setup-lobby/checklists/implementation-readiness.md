@@ -13,7 +13,7 @@
 - [ ] CHK001 Are all five user stories (US1–US5) covered by at least one functional requirement (FR-001–FR-008)? [Completeness, Spec §FR]
 - [ ] CHK002 Are all edge cases from the Edge Cases section traceable to a functional requirement or explicit spec note? [Completeness, Spec §Edge Cases]
 - [ ] CHK003 Is the "Drop Below 2 Players" edge case explicitly referenced in a functional requirement (currently only in Edge Cases prose)? [Gap, Spec §FR-006]
-- [ ] CHK004 Are joining-a-started-room restrictions (status `"game"`) specified as a requirement, or intentionally excluded? [Coverage, Gap]
+- [x] CHK004 Are joining-a-started-room restrictions (status `"game"`) specified as a requirement, or intentionally excluded? [Coverage, Gap] — **FIXED**: Implemented 409 Conflict response when joinRoom checks room.status === "game"
 
 ---
 
@@ -42,7 +42,7 @@
 
 ## Scenario & Edge Case Coverage
 
-- [ ] CHK013 Are requirements defined for what happens when a guest tries to join a room that is already in `"game"` status (post-start)? [Coverage, Gap]
+- [x] CHK013 Are requirements defined for what happens when a guest tries to join a room that is already in `"game"` status (post-start)? [Coverage, Gap] — **FIXED**: POST /rooms/:code/join now returns 409 Conflict with error message "Room is already in game"
 - [ ] CHK014 Are requirements specified for duplicate player names within the same room — is this intentionally allowed or should it be rejected? [Gap, Spec §Edge Cases]
 - [ ] CHK015 Are requirements defined for the maximum number of participants per room, or is this intentionally unbounded? [Completeness, Gap]
 
