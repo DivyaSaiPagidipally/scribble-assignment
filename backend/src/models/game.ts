@@ -5,7 +5,13 @@ export interface Participant {
   id: string;
   name: string;
   joinedAt: string;
+  role?: ParticipantRole;
   isHost?: boolean;
+}
+
+export interface GameRound {
+  secretWord: string;
+  startedAt: string;
 }
 
 export interface Room {
@@ -13,6 +19,7 @@ export interface Room {
   status: RoomStatus;
   participants: Participant[];
   hostId: string;
+  round?: GameRound;
   createdAt: string;
   updatedAt: string;
 }
@@ -23,6 +30,7 @@ export interface RoomSnapshot {
   participants: Participant[];
   availableWords: string[];
   roles: ParticipantRole[];
+  secretWord?: string;
 }
 
 export interface RoomSessionResponse {

@@ -159,4 +159,47 @@ describe("roomStore", () => {
     const room = getRoom(code)!;
     expect(room.participants).toHaveLength(2);
   });
+
+  it("startGame assigns roles and selects first word deterministically", () => {
+    const created = createRoom("Alice");
+    const code = created.room.code;
+    const hostId = created.participantId;
+    const joined = joinRoom(code, "Bob");
+    const guestId = joined.participantId as string;
+
+    const startResult = startGame(code, hostId);
+    expect(startResult.success).toBe(true);
+
+    const room = getRoom(code)!;
+    expect(room.round).toBeDefined();
+    expect(room.round!.secretWord).toBe("rocket");
+
+    const host = room.participants.find((p) => p.id === hostId);
+    const guest = room.participants.find((p) => p.id === guestId);
+    expect(host!.role).toBe("drawer");
+    expect(guest!.role).toBe("guesser");
+  });
+
+  it("toRoomSnapshot filters secretWord based on requester role", () => {
+    const created = createRoom("Alice");
+    const code = created.room.code;
+    const hostId = created.participantId;
+    const joined = joinRoom(code, "Bob");
+    const guestId = joined.participantId as string;
+
+    startGame(code, hostId);
+    const room = getRoom(code)!;
+
+    // Drawer viewer snapshot: should contain secretWord
+    const drawerSnapshot = toRoomSnapshot(room, hostId);
+    expect(drawerSnapshot.secretWord).toBe("rocket");
+
+    // Guesser viewer snapshot: should not contain secretWord
+    const guesserSnapshot = toRoomSnapshot(room, guestId);
+    expect(guesserSnapshot.secretWord).toBeUndefined();
+
+    // Anonymous viewer snapshot: should not contain secretWord
+    const anonSnapshot = toRoomSnapshot(room);
+    expect(anonSnapshot.secretWord).toBeUndefined();
+  });
 });

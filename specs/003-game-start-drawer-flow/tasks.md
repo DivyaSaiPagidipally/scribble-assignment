@@ -20,8 +20,8 @@
 
 **Purpose**: Verification of current codebase status before implementing new features
 
-- [ ] T001 Verify existing setup by running dev build of frontend and backend
-- [ ] T002 Ensure linting and tests pass on existing code
+- [x] T001 Verify existing setup by running dev build of frontend and backend
+- [x] T002 Ensure linting and tests pass on existing code
 
 ---
 
@@ -31,8 +31,8 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 Extend Participant type and Room/RoomSnapshot interfaces in [backend/src/models/game.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/models/game.ts)
-- [ ] T004 Update Participant and RoomSnapshot interfaces to support role and secretWord in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
+- [x] T003 Extend Participant type and Room/RoomSnapshot interfaces in [backend/src/models/game.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/models/game.ts)
+- [x] T004 Update Participant and RoomSnapshot interfaces to support role and secretWord in [frontend/src/services/api.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/services/api.ts)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -46,10 +46,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T005 [P] [US1] Write unit tests for playerName validation rules in [backend/src/api/schemas.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.test.ts)
-- [ ] T006 [US1] Ensure Zod validation schema playerName uses `.trim().min(1)` in [backend/src/api/schemas.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.ts)
-- [ ] T007 [US1] Add frontend trim and empty check validation messages in [frontend/src/pages/CreateRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/CreateRoomPage.tsx)
-- [ ] T008 [US1] Add frontend trim and empty check validation messages in [frontend/src/pages/JoinRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/JoinRoomPage.tsx)
+- [x] T005 [P] [US1] Write unit tests for playerName validation rules in [backend/src/api/schemas.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.test.ts)
+- [x] T006 [US1] Ensure Zod validation schema playerName uses `.trim().min(1)` in [backend/src/api/schemas.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/api/schemas.ts)
+- [x] T007 [US1] Add frontend trim and empty check validation messages in [frontend/src/pages/CreateRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/CreateRoomPage.tsx)
+- [x] T008 [US1] Add frontend trim and empty check validation messages in [frontend/src/pages/JoinRoomPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/JoinRoomPage.tsx)
 
 **Checkpoint**: Player name validation is secure and rejects invalid entries on both frontend and backend.
 
@@ -63,11 +63,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T009 [P] [US2] Write unit tests for drawer role assignment upon starting the game in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
-- [ ] T010 [US2] In `startGame` logic, assign roles to all participants dynamically in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T011 [US2] Update `toRoomSnapshot` to serialize participant roles in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T012 [US2] Render role badge on the user scoreboard inside [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
-- [ ] T013 [US2] Fetch and store current player's role on game start transition in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
+- [x] T009 [P] [US2] Write unit tests for drawer role assignment upon starting the game in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
+- [x] T010 [US2] In `startGame` logic, assign roles to all participants dynamically in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T011 [US2] Update `toRoomSnapshot` to serialize participant roles in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T012 [US2] Render role badge on the user scoreboard inside [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
+- [x] T013 [US2] Fetch and store current player's role on game start transition in [frontend/src/pages/LobbyPage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/LobbyPage.tsx)
 
 **Checkpoint**: Roles are assigned synchronously upon game start, and players can view their role badge.
 
@@ -81,8 +81,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T014 [P] [US3] Write unit tests for deterministic word selection on room start in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
-- [ ] T015 [US3] Initialize room round with the first word of the starter list in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T014 [P] [US3] Write unit tests for deterministic word selection on room start in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
+- [x] T015 [US3] Initialize room round with the first word of the starter list in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
 
 **Checkpoint**: Secret word selection is fully deterministic and stored in-memory.
 
@@ -96,10 +96,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T016 [P] [US4] Write unit/integration tests for role-based snapshot secretWord filtering in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
-- [ ] T017 [US4] Modify `toRoomSnapshot` to dynamically filter `secretWord` based on viewer's role in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
-- [ ] T018 [US4] UI: Display the secret word card on the canvas page for the drawer in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
-- [ ] T019 [US4] UI: Hide secret word elements and rendering logic for guessers in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
+- [x] T016 [P] [US4] Write unit/integration tests for role-based snapshot secretWord filtering in [backend/src/services/roomStore.test.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.test.ts)
+- [x] T017 [US4] Modify `toRoomSnapshot` to dynamically filter `secretWord` based on viewer's role in [backend/src/services/roomStore.ts](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/backend/src/services/roomStore.ts)
+- [x] T018 [US4] UI: Display the secret word card on the canvas page for the drawer in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
+- [x] T019 [US4] UI: Hide secret word elements and rendering logic for guessers in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
 
 **Checkpoint**: Role-based filtering prevents network leakage, and the secret word is only visible to the drawer.
 
@@ -109,10 +109,10 @@
 
 **Purpose**: General styling alignment, Edge cases, and quality checks
 
-- [ ] T020 Handle edge case: Ensure proper state preservation if a user reloads the GamePage (fetch state on mount) in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
-- [ ] T021 Apply styling and micro-animations to secret word details and badge elements in [frontend/src/styles/app.css](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/styles/app.css)
-- [ ] T022 Clean up debugging statements and verify TypeScript typings
-- [ ] T023 Run verification plan checks to confirm all scenarios are green
+- [x] T020 Handle edge case: Ensure proper state preservation if a user reloads the GamePage (fetch state on mount) in [frontend/src/pages/GamePage.tsx](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/pages/GamePage.tsx)
+- [x] T021 Apply styling and micro-animations to secret word details and badge elements in [frontend/src/styles/app.css](file:///Users/pagidipallydivyasai/Developer/learning/scribble-assignment/frontend/src/styles/app.css)
+- [x] T022 Clean up debugging statements and verify TypeScript typings
+- [x] T023 Run verification plan checks to confirm all scenarios are green
 
 ---
 

@@ -113,7 +113,21 @@ export function startGame(code: string, participantId: string): { success: boole
   if (room.participants.length < 2) {
     return { success: false, error: "At least 2 players are required to start the game" };
   }
+
+  // Assign roles
+  room.participants.forEach((participant) => {
+    if (participant.id === room.hostId) {
+      participant.role = "drawer";
+    } else {
+      participant.role = "guesser";
+    }
+  });
+
   room.status = "game";
+  room.round = {
+    secretWord: STARTER_WORDS[0], // "rocket"
+    startedAt: now()
+  };
   room.updatedAt = now();
   rooms.set(room.code, room);
   return { success: true };
@@ -142,16 +156,25 @@ export function leaveRoom(code: string, participantId: string): { success: boole
 }
 
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
-  void viewerParticipantId;
+  const isDrawer = viewerParticipantId
+    ? room.participants.some((p) => p.id === viewerParticipantId && p.role === "drawer")
+    : false;
 
-  return {
+  const snapshot: RoomSnapshot = {
     code: room.code,
     status: room.status,
     participants: room.participants.map((participant) => ({
       ...participant,
-      isHost: participant.id === room.hostId
+      isHost: participant.id === room.hostId,
+      role: participant.role
     })),
     availableWords: listWords(),
     roles: [...STARTER_ROLES]
   };
+
+  if (room.status === "game" && room.round && isDrawer) {
+    snapshot.secretWord = room.round.secretWord;
+  }
+
+  return snapshot;
 }
