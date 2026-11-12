@@ -264,7 +264,7 @@ npm run build
 
 ## Troubleshooting
 
-- Copying a room code requires clipboard permission and a secure browser context (HTTPS or localhost). If copying fails, select the displayed code and copy it manually.
+- Copying a room code requires clipboard permission and a secure browser context (HTTPS or localhost). If the button says Copy failed, select the displayed code and copy it manually, or try the button again.
 - If the frontend cannot reach the backend, verify the backend is running on port `3001`.
 - If the backend port is already in use, run `PORT=<new-port> npm run dev`.
 - If local commands are missing, rerun `npm install` in the relevant app directory.
