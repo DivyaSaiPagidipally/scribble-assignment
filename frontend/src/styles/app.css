@@ -103,7 +103,7 @@ input {
 }
 
 .room-code-badge__copy.button {
-  width: 5rem;
+  width: 6rem;
   min-height: 32px;
   padding: 0 8px;
   font-size: 0.875rem;
@@ -116,6 +116,7 @@ input {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  user-select: text;
 }
 
 .room-code-badge__hint {

@@ -38,7 +38,7 @@ export function RoomCodeBadge({ code }: RoomCodeBadgeProps) {
       <div className="room-code-badge__row">
         <span className="room-code-badge__code">{code}</span>
         <button className="button button--secondary room-code-badge__copy" type="button" onClick={handleCopy}>
-          {copyState === "copied" ? "Copied" : "Copy"}
+          {copyState === "copied" ? "Copied" : copyState === "error" ? "Copy failed" : "Copy"}
         </button>
       </div>
       <span className="room-code-badge__hint" role="status">

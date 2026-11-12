@@ -58,20 +58,42 @@ describe("RoomCodeBadge", () => {
     expect(container.querySelector(".room-code-badge__code")?.textContent).toBe("Ab12");
   });
 
-  it("reports clipboard rejection or unavailability without claiming success", async () => {
+  it("shows Copy failed and keeps the code selectable after rejection or unavailability", async () => {
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: vi.fn().mockRejectedValue(new Error("denied")) } });
     act(() => root.render(<RoomCodeBadge code="ABCD" />));
     await act(async () => button().click());
-    expect(button().textContent).toBe("Copy");
+    expect(button().textContent).toBe("Copy failed");
     expect(container.querySelector('[role="status"]')?.textContent).toContain("Copy failed");
+    const code = container.querySelector(".room-code-badge__code");
+    if (!code) throw new Error("Room code missing");
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(code);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    expect(selection?.toString()).toBe("ABCD");
+    selection?.removeAllRanges();
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: undefined });
     await act(async () => button().click());
-    expect(button().textContent).toBe("Copy");
+    expect(button().textContent).toBe("Copy failed");
     expect(container.querySelector('[role="status"]')?.textContent).toContain("Copy failed");
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: vi.fn().mockResolvedValue(undefined) } });
     await act(async () => button().click());
     expect(button().textContent).toBe("Copied");
     expect(container.querySelector('[role="status"]')?.textContent).not.toContain("Copy failed");
+  });
+
+  it("keeps a failure visible when a previous success timer would have expired", async () => {
+    vi.useFakeTimers();
+    const writeText = vi.fn().mockResolvedValueOnce(undefined).mockRejectedValueOnce(new Error("denied"));
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    act(() => root.render(<RoomCodeBadge code="ABCD" />));
+    await act(async () => button().click());
+    act(() => vi.advanceTimersByTime(1000));
+    await act(async () => button().click());
+    expect(button().textContent).toBe("Copy failed");
+    act(() => vi.advanceTimersByTime(2000));
+    expect(button().textContent).toBe("Copy failed");
   });
 
   it("ignores an old copy result when the room code changes", async () => {
