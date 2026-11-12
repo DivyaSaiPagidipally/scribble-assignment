@@ -75,7 +75,7 @@ Implemented today:
 
 - app shell and page routing
 - branded landing page and cleaned starter UI
-- create room flow
+- create room flow, with a Copy button on the room code badge in the lobby and game screens
 - join room by code flow
 - fetch room snapshot flow
 - in-memory room storage on the backend
@@ -137,7 +137,7 @@ Use this to confirm the starter works from a clean clone:
 1. Start the backend and confirm `http://localhost:3001/health` returns `{ "ok": true }`.
 2. Start the frontend and open `http://localhost:5173`.
 3. Confirm the Start screen shows `Create Room` and `Join Room`.
-4. Create a room and confirm you land on the Lobby screen.
+4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
 5. Open another tab, join the same room, and use the Lobby refresh button to load the latest participant list.
 6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
 7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
@@ -264,6 +264,7 @@ npm run build
 
 ## Troubleshooting
 
+- Copying a room code requires clipboard permission and a secure browser context (HTTPS or localhost). If copying fails, select the displayed code and copy it manually.
 - If the frontend cannot reach the backend, verify the backend is running on port `3001`.
 - If the backend port is already in use, run `PORT=<new-port> npm run dev`.
 - If local commands are missing, rerun `npm install` in the relevant app directory.
