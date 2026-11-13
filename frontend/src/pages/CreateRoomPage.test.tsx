@@ -17,7 +17,7 @@ describe("create room", () => {
     vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
     vi.spyOn(api, "createRoom").mockResolvedValue({
       participantId: "p1",
-      room: { code: "ABCD", status: "lobby", participants: [], availableWords: [], roles: [] },
+      room: { code: "ABCD", status: "lobby", hostParticipantId: "p1", participants: [], availableWords: [], roles: [] },
     });
     const container = document.createElement("div");
     document.body.appendChild(container);

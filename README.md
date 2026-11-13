@@ -11,7 +11,7 @@ Granular, meaningful commits are encouraged so implementation decisions remain e
 | Item | Details |
 |------|---------|
 | Project type | Brownfield enhancement |
-| Tech model | Frontend + minimal REST backend, in-memory store, manual room refresh in the starter; polling added by learners |
+| Tech model | Frontend + minimal REST backend, in-memory store, HTTP lobby polling |
 | Difficulty | Intermediate |
 | Prerequisites | Comfort reading an existing codebase. |
 
@@ -69,7 +69,7 @@ By the end of this lab you should be able to:
 
 ## Current Implementation
 
-The current branch is scaffold-only.
+The current branch extends the scaffold with a live lobby participant list.
 
 Implemented today:
 
@@ -79,14 +79,13 @@ Implemented today:
 - join room by code flow
 - fetch room snapshot flow
 - in-memory room storage on the backend
-- lobby participant display from the latest fetched snapshot
+- lobby participant list with the creator marked Host, refreshed by HTTP polling approximately every 2 seconds and manually on request
 - game screen placeholders for canvas, guess input, scoreboard, and results
 - basic light UI styling
 
 Not implemented yet:
 
-- host behavior or host-only permissions
-- automatic lobby polling
+- host-only permissions
 - start game flow
 - drawer assignment
 - secret word visibility rules
@@ -106,7 +105,7 @@ Backend endpoints currently available:
 - `POST /rooms/:code/join`
 - `GET /rooms/:code`
 
-The backend stores all room data in memory only. Restarting the backend clears all rooms.
+Room responses include `room.hostParticipantId` (the creator's participant ID) and `room.participants` with each player's ID and name. Create and join return a participant ID and snapshot; GET returns the latest snapshot. The backend stores all room data in memory only. Restarting the backend clears all rooms.
 
 ## Run The Backend
 
@@ -138,7 +137,7 @@ Use this to confirm the starter works from a clean clone:
 2. Start the frontend and open `http://localhost:5173`.
 3. Confirm the Start screen shows `Create Room` and `Join Room`.
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
-5. Open another tab, join the same room, and use the Lobby refresh button to load the latest participant list.
+5. Open another tab, join the same room with a different name, and confirm both lobbies show both names and mark the creator Host after polling (about two seconds). Refresh Room also fetches the list manually; if a refresh fails, the last list remains visible and polling retries.
 6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
 7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 

@@ -412,9 +412,12 @@ input {
 }
 
 .player-list__meta {
-  color: var(--ink-soft);
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #e0e7ff;
+  color: var(--brand-strong);
   font-size: 0.875rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 .status-line,
