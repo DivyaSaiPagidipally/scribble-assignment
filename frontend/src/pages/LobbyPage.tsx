@@ -17,6 +17,30 @@ export function LobbyPage() {
     }
   }, [navigate, room]);
 
+  const roomCode = room?.code;
+
+  useEffect(() => {
+    if (!roomCode) return;
+
+    let active = true;
+    let timer: ReturnType<typeof setTimeout>;
+    async function poll() {
+      try {
+        await roomStore.fetchRoom();
+        if (active) setRefreshError(null);
+      } catch (caughtError) {
+        if (active) setRefreshError(caughtError instanceof Error ? caughtError.message : "Unable to refresh room");
+      } finally {
+        if (active) timer = setTimeout(poll, 2000);
+      }
+    }
+    timer = setTimeout(poll, 2000);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [roomCode, roomStore]);
+
   async function handleRefresh() {
     try {
       setRefreshError(null);
@@ -50,7 +74,7 @@ export function LobbyPage() {
               {room.participants.map((participant) => (
                 <li key={participant.id}>
                   <span>{participant.name}</span>
-                  <span className="player-list__meta">joined</span>
+                  {participant.id === room.hostParticipantId && <span className="player-list__meta">Host</span>}
                 </li>
               ))}
             </ul>

@@ -27,6 +27,7 @@ class RoomStore {
   };
 
   private listeners = new Set<Listener>();
+  private pendingFetch: { code: string; participantId: string | null; promise: Promise<RoomSnapshot> } | null = null;
 
   subscribe = (listener: Listener) => {
     this.listeners.add(listener);
@@ -94,9 +95,26 @@ class RoomStore {
       return null;
     }
 
-    const response = await api.fetchRoom(this.state.room.code, this.state.participantId ?? undefined);
-    this.setRoomSnapshot(response.room);
-    return response.room;
+    const code = this.state.room.code;
+    const participantId = this.state.participantId;
+    if (this.pendingFetch?.code === code && this.pendingFetch.participantId === participantId) {
+      return this.pendingFetch.promise;
+    }
+
+    const promise = api.fetchRoom(code, participantId ?? undefined).then((response) => {
+      if (this.state.room?.code === code && this.state.participantId === participantId) {
+        this.setRoomSnapshot(response.room);
+      }
+      return response.room;
+    });
+    this.pendingFetch = { code, participantId, promise };
+    try {
+      return await promise;
+    } finally {
+      if (this.pendingFetch?.promise === promise) {
+        this.pendingFetch = null;
+      }
+    }
   }
 }
 
