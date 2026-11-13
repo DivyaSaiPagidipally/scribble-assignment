@@ -73,7 +73,7 @@ The current branch is scaffold-only.
 
 Implemented today:
 
-- app shell and page routing
+- app shell and page routing, with a current-year Scribble footer on every page
 - branded landing page and cleaned starter UI
 - create room flow, with a Copy button on the room code badge in the lobby and game screens
 - join room by code flow
@@ -140,7 +140,8 @@ Use this to confirm the starter works from a clean clone:
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
 5. Open another tab, join the same room, and use the Lobby refresh button to load the latest participant list.
 6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
-7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
+7. Check that every page has a current-year Scribble footer below its content, including when the page scrolls.
+8. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 
 ## Recommended Build Order
 

@@ -145,6 +145,13 @@ input {
   align-items: stretch;
 }
 
+.app-shell__footer {
+  padding-top: 24px;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
 /* Panel styles (forms, hero sections) */
 .panel {
   width: 100%;
