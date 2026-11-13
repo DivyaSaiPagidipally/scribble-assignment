@@ -46,11 +46,13 @@ describe("lobby player count", () => {
       if (!refresh) throw new Error("Refresh button missing");
       await act(async () => refresh.click());
       expect(fetchRoom).toHaveBeenCalledWith("ABCD", "p1");
-      expect(container.querySelector(".card h2")?.textContent).toBe("Participants (3 players)");
+      expect(container.querySelector(".card h2")?.textContent).toBe("Participants (3)");
+      expect(container.querySelector(".card h2")?.getAttribute("aria-label")).toBe("Participants (3 players)");
       expect(container.querySelectorAll(".player-list li")).toHaveLength(3);
       expect(container.querySelector(".player-list")?.textContent).toContain("Carol");
       await act(async () => refresh.click());
-      expect(container.querySelector(".card h2")?.textContent).toBe("Participants (0 players)");
+      expect(container.querySelector(".card h2")?.textContent).toBe("Participants (0)");
+      expect(container.querySelector(".card h2")?.getAttribute("aria-label")).toBe("Participants (0 players)");
       expect(container.querySelectorAll(".player-list li")).toHaveLength(0);
       expect(container.textContent).toContain("No participants are connected");
     } finally {
@@ -68,7 +70,9 @@ describe("lobby player count", () => {
       act(() => root.render(
         <RoomStoreProvider><MemoryRouter><InitializeRoom room={roomWithPlayers(participants.slice(0, 1))} /></MemoryRouter></RoomStoreProvider>
       ));
-      expect(container.querySelector(".card h2")?.textContent).toBe("Participants (1 player)");
+      const heading = container.querySelector(".card h2");
+      expect(heading?.textContent).toBe("Participants (1)");
+      expect(heading?.getAttribute("aria-label")).toBe("Participants (1 player)");
       expect(container.querySelectorAll(".player-list li")).toHaveLength(1);
     } finally {
       act(() => root.unmount());
@@ -87,7 +91,7 @@ describe("lobby player count", () => {
       ));
       const list = container.querySelector(".player-list");
       const card = list?.closest(".card");
-      expect(card?.querySelector("h2")?.textContent).toBe("Participants (2 players)");
+      expect(card?.querySelector("h2")?.textContent).toBe("Participants (2)");
       expect(list?.querySelectorAll("li")).toHaveLength(2);
     } finally {
       act(() => root.unmount());
