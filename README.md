@@ -1,5 +1,7 @@
 # Scribble Starter
 
+Scribble is a starter for a multiplayer drawing and guessing game.
+
 This repository is a scaffold for the Scribble lab.
 
 ## Overview
