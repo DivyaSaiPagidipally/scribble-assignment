@@ -42,7 +42,7 @@ export function LobbyPage() {
       </div>
 
       <div className="summary-grid">
-        <Card title="Participants">
+        <Card title={`Participants (${room.participants.length} ${room.participants.length === 1 ? "player" : "players"})`}>
           {room.participants.length === 0 ? (
             <p>No participants are connected to this room yet.</p>
           ) : (
