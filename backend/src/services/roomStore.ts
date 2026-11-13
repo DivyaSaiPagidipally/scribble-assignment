@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { Participant, Room, RoomSnapshot, Guess } from "../models/game.js";
 import { STARTER_ROLES, STARTER_WORDS } from "../seed/starterData.js";
 
-const rooms = new Map<string, Room>();
+import { roomRepository } from "../db/roomRepository.js";
 
 function now() {
   return new Date().toISOString();
@@ -22,7 +22,7 @@ function generateCode() {
 function generateUniqueCode() {
   let code = generateCode();
 
-  while (rooms.has(code)) {
+  while (roomRepository.exists(code)) {
     code = generateCode();
   }
 
@@ -61,7 +61,7 @@ export function createRoom(playerName?: string) {
     updatedAt: now()
   };
 
-  rooms.set(room.code, room);
+  roomRepository.save(room);
 
   return {
     room: cloneRoom(room),
@@ -70,7 +70,7 @@ export function createRoom(playerName?: string) {
 }
 
 export function joinRoom(code: string, playerName?: string): { success: boolean; participantId?: string; room?: Room; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
 
   if (!room) {
     return { success: false, error: "Room not found" };
@@ -83,7 +83,7 @@ export function joinRoom(code: string, playerName?: string): { success: boolean;
   const participant = createParticipant(playerName);
   room.participants.push(participant);
   room.updatedAt = now();
-  rooms.set(room.code, room);
+  roomRepository.save(room);
 
   return {
     success: true,
@@ -93,18 +93,18 @@ export function joinRoom(code: string, playerName?: string): { success: boolean;
 }
 
 export function getRoom(code: string) {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   return room ? cloneRoom(room) : null;
 }
 
 export function saveRoom(room: Room) {
   room.updatedAt = now();
-  rooms.set(room.code, cloneRoom(room));
+  roomRepository.save(room);
   return getRoom(room.code);
 }
 
 export function startGame(code: string, participantId: string): { success: boolean; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   if (!room) {
     return { success: false, error: "Room not found" };
   }
@@ -132,18 +132,18 @@ export function startGame(code: string, participantId: string): { success: boole
     guesses: []
   };
   room.updatedAt = now();
-  rooms.set(room.code, room);
+  roomRepository.save(room);
   return { success: true };
 }
 
 export function leaveRoom(code: string, participantId: string): { success: boolean; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   if (!room) {
     return { success: false, error: "Room not found" };
   }
 
   if (room.hostId === participantId) {
-    rooms.delete(room.code);
+    roomRepository.delete(room.code);
     return { success: true };
   }
 
@@ -151,7 +151,7 @@ export function leaveRoom(code: string, participantId: string): { success: boole
   if (index !== -1) {
     room.participants.splice(index, 1);
     room.updatedAt = now();
-    rooms.set(room.code, room);
+    roomRepository.save(room);
     return { success: true };
   }
 
@@ -159,7 +159,7 @@ export function leaveRoom(code: string, participantId: string): { success: boole
 }
 
 export function updateDrawing(code: string, drawingData: string): { success: boolean; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   if (!room) {
     return { success: false, error: "Room not found" };
   }
@@ -171,12 +171,12 @@ export function updateDrawing(code: string, drawingData: string): { success: boo
   }
   room.round.drawingData = drawingData;
   room.updatedAt = now();
-  rooms.set(room.code, room);
+  roomRepository.save(room);
   return { success: true };
 }
 
 export function clearDrawing(code: string): { success: boolean; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   if (!room) {
     return { success: false, error: "Room not found" };
   }
@@ -188,12 +188,12 @@ export function clearDrawing(code: string): { success: boolean; error?: string }
   }
   room.round.drawingData = "";
   room.updatedAt = now();
-  rooms.set(room.code, room);
+  roomRepository.save(room);
   return { success: true };
 }
 
 export function submitGuess(code: string, participantId: string, guessText: string): { success: boolean; guess?: Guess; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   if (!room) {
     return { success: false, error: "Room not found" };
   }
@@ -248,13 +248,13 @@ export function submitGuess(code: string, participantId: string, guessText: stri
   }
 
   room.updatedAt = now();
-  rooms.set(room.code, room);
+  roomRepository.save(room);
 
   return { success: true, guess };
 }
 
 export function endRound(code: string, participantId: string): { success: boolean; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   if (!room) {
     return { success: false, error: "Room not found" };
   }
@@ -266,12 +266,12 @@ export function endRound(code: string, participantId: string): { success: boolea
   }
   room.status = "result";
   room.updatedAt = now();
-  rooms.set(room.code, room);
+  roomRepository.save(room);
   return { success: true };
 }
 
 export function restartGame(code: string, participantId: string): { success: boolean; error?: string } {
-  const room = rooms.get(code.trim().toUpperCase());
+  const room = roomRepository.find(code.trim().toUpperCase());
   if (!room) {
     return { success: false, error: "Room not found" };
   }
@@ -285,7 +285,7 @@ export function restartGame(code: string, participantId: string): { success: boo
     p.score = 0;
   });
   room.updatedAt = now();
-  rooms.set(room.code, room);
+  roomRepository.save(room);
   return { success: true };
 }
 

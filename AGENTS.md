@@ -33,7 +33,7 @@ You are working on a monolithic repository for a multiplayer drawing game ("Scri
 
 ## Strictly Forbidden
 -   **No WebSockets**: Do not use WebSockets, Socket.io, or any real-time push protocol. All sync must use HTTP polling.
--   **No Databases**: Do not use any database (SQL, NoSQL, SQLite, etc.). All data is stored in-memory only.
+-   **Database**: Room data is persisted in SQLite via Node's built-in `node:sqlite` (`backend/src/db`). DB file defaults to `backend/data/scribble.db` (override with `DB_PATH`); tests use an in-memory DB.
 -   **No Authentication**: Do not add authentication, sessions, JWT, or OAuth.
 
 ## Agent Persona
