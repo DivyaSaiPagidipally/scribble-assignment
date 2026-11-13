@@ -13,6 +13,7 @@ export function AppShell({ children }: PropsWithChildren) {
         </div>
       </header>
       <main className="app-shell__main">{children}</main>
+      <footer className="app-shell__footer">© {new Date().getFullYear()} Scribble</footer>
     </div>
   );
 }
