@@ -48,13 +48,13 @@ export function LobbyPage() {
           ) : (
             <ul className="player-list">
               {room.participants.map((participant) => (
-                <li key={participant.id}>
+                <li className="player-card" key={participant.id}>
                   <span>{participant.name}</span>
-                  <span className="player-list__meta">joined</span>
                 </li>
               ))}
             </ul>
           )}
+          <p>{room.participants.length} {room.participants.length === 1 ? "player" : "players"}</p>
         </Card>
 
         <Card title="Status">
