@@ -398,7 +398,7 @@ input {
   list-style: none;
 }
 
-.player-list li {
+.player-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -409,12 +409,6 @@ input {
   color: var(--ink);
   font-size: 1rem;
   font-weight: 500;
-}
-
-.player-list__meta {
-  color: var(--ink-soft);
-  font-size: 0.875rem;
-  font-weight: 400;
 }
 
 .status-line,
