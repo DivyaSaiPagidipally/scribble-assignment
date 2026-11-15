@@ -3,6 +3,7 @@ export type ParticipantRole = "drawer" | "guesser";
 export interface Participant {
   id: string;
   name: string;
+  role: ParticipantRole;
   joinedAt: string;
 }
 

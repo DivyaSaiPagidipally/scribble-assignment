@@ -4,6 +4,7 @@ export type RoomStatus = "lobby";
 export interface Participant {
   id: string;
   name: string;
+  role: ParticipantRole;
   joinedAt: string;
 }
 

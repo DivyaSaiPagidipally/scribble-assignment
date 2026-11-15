@@ -4,7 +4,10 @@ import {
   HttpError,
   joinRoomSchema,
   roomCodeParamsSchema,
-  roomViewerQuerySchema
+  roomResponseSchema,
+  roomSessionResponseSchema,
+  roomViewerQuerySchema,
+  validateResponse
 } from "./schemas.js";
 import { createRoom, getRoom, joinRoom, toRoomSnapshot } from "../services/roomStore.js";
 
@@ -16,10 +19,10 @@ export function createRoomsRouter() {
       const { playerName } = createRoomSchema.parse(request.body);
       const result = createRoom(playerName);
 
-      response.status(201).json({
+      response.status(201).json(validateResponse(roomSessionResponseSchema, {
         participantId: result.participantId,
         room: toRoomSnapshot(result.room, result.participantId)
-      });
+      }));
     } catch (error) {
       next(error);
     }
@@ -35,10 +38,10 @@ export function createRoomsRouter() {
         throw new HttpError(404, "Unable to join room");
       }
 
-      response.json({
+      response.json(validateResponse(roomSessionResponseSchema, {
         participantId: result.participantId,
         room: toRoomSnapshot(result.room, result.participantId)
-      });
+      }));
     } catch (error) {
       next(error);
     }
@@ -54,9 +57,9 @@ export function createRoomsRouter() {
         throw new HttpError(404, "Unable to load room");
       }
 
-      response.json({
+      response.json(validateResponse(roomResponseSchema, {
         room: toRoomSnapshot(room, participantId)
-      });
+      }));
     } catch (error) {
       next(error);
     }
