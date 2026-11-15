@@ -27,7 +27,7 @@ It already provides:
 
 It does not implement the required room and gameplay features described in the business scenarios below.
 
-The current UI uses Scribble branding and presentational copy, but the supported behavior is still the scaffold described in this document.
+The current UI uses Scribble branding and presentational copy; supported behavior is described below.
 
 ## Prerequisites
 
@@ -69,7 +69,7 @@ By the end of this lab you should be able to:
 
 ## Current Implementation
 
-The current branch is scaffold-only.
+The current branch is an incomplete scaffold with incremental lobby and game-screen features.
 
 Implemented today:
 
@@ -80,7 +80,7 @@ Implemented today:
 - fetch room snapshot flow
 - in-memory room storage on the backend
 - lobby player cards showing names and server-assigned roles, plus a player count and empty state from the latest fetched snapshot
-- game screen placeholders for canvas, guess input, scoreboard, and results
+- a Game screen word card for the drawer, and placeholders for canvas, guess input, scoreboard, and results
 - basic light UI styling
 
 Not implemented yet:
@@ -89,7 +89,6 @@ Not implemented yet:
 - automatic lobby polling
 - start game flow
 - drawer reassignment or rotation
-- secret word visibility rules
 - drawing interaction
 - clear canvas action
 - guess submission and synced history
@@ -107,6 +106,10 @@ Backend endpoints currently available:
 - `GET /rooms/:code`
 
 The backend stores all room data in memory only. Restarting the backend clears all rooms. Create, join, and fetch responses include `room.participants`, each with `id`, `name`, `role` (`drawer` or `guesser`), and `joinedAt`. The creator is assigned drawer on creation; later joiners are guessers. Roles are not user-selected or reassigned in this feature.
+
+The first word in the shared starter word list is selected deterministically for each room. `room.currentWord` is included only for the drawer: in the create response and in `GET /rooms/:code?participantId=<drawer-id>`. Join responses and snapshots for guessers, missing IDs, or unknown IDs omit it. Snapshots no longer expose `availableWords`. The Game screen shows the word in a card for the drawer; the Start Game button still only navigates locally and does not start a synchronized round.
+
+This is a visibility convention, not security: there is no authentication, participant IDs are visible in snapshots, and the word is predictable from the public starter list. A player can impersonate another participant or infer the word.
 
 ## Run The Backend
 
@@ -139,7 +142,7 @@ Use this to confirm the starter works from a clean clone:
 3. Confirm the Start screen shows `Create Room` and `Join Room`.
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
 5. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. Confirm the creator is shown as drawer and the joiner as guesser. The list only changes on refresh.
-6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
+6. Open the Game screen in both tabs. Confirm the creator sees the word card and the joiner does not. Canvas, guess input, scoreboard, and result areas remain placeholders.
 7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 
 ## Recommended Build Order

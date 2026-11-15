@@ -25,8 +25,8 @@ export const roomSnapshotSchema = z.object({
     role: z.enum(["drawer", "guesser"]),
     joinedAt: z.string()
   })),
-  availableWords: z.array(z.string()),
-  roles: z.array(z.enum(["drawer", "guesser"]))
+  roles: z.array(z.enum(["drawer", "guesser"])),
+  currentWord: z.string().optional()
 });
 
 export const roomSessionResponseSchema = z.object({

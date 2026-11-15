@@ -98,13 +98,13 @@ export function saveRoom(room: Room) {
 }
 
 export function toRoomSnapshot(room: Room, viewerParticipantId?: string): RoomSnapshot {
-  void viewerParticipantId;
+  const viewer = room.participants.find((participant) => participant.id === viewerParticipantId);
 
   return {
     code: room.code,
     status: room.status,
     participants: room.participants.map((participant) => ({ ...participant })),
-    availableWords: listWords(),
-    roles: [...STARTER_ROLES]
+    roles: [...STARTER_ROLES],
+    ...(viewer?.role === "drawer" ? { currentWord: listWords()[0] } : {})
   };
 }

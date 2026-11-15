@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createRoom, getRoom, joinRoom, saveRoom, toRoomSnapshot } from "./roomStore.js";
+import { createRoom, getRoom, joinRoom, listWords, saveRoom, toRoomSnapshot } from "./roomStore.js";
 
 describe("roomStore", () => {
   it("createRoom returns a room with a 4-character uppercase code", () => {
@@ -24,6 +24,20 @@ describe("roomStore", () => {
       ["Alice", "drawer"], ["Bob", "guesser"], ["Carol", "guesser"]
     ]);
     expect(toRoomSnapshot(carol!.room, carol!.participantId).participants).toEqual(stored!.participants);
+  });
+
+  it("selects the first room-list word consistently for the drawer", () => {
+    const created = createRoom("Alice");
+    const words = listWords();
+    expect(words.length).toBeGreaterThan(0);
+    expect(toRoomSnapshot(created.room, created.participantId).currentWord).toBe(words[0]);
+    joinRoom(created.room.code, "Bob");
+    const refreshed = getRoom(created.room.code);
+    expect(refreshed).not.toBeNull();
+    expect(toRoomSnapshot(refreshed!, created.participantId).currentWord).toBe(words[0]);
+    const firstWord = words.shift();
+    expect(toRoomSnapshot(refreshed!, created.participantId).currentWord).toBe(firstWord);
+    expect(listWords()[0]).toBe(firstWord);
   });
 
   it("does not assign a new drawer when joining an empty saved room", () => {

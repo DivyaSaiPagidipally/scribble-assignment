@@ -9,7 +9,7 @@ describe("schemas", () => {
   });
 
   it("rejects a room response with a missing or invalid participant role", () => {
-    const room = { code: "ABCD", status: "lobby", availableWords: [], roles: [], participants: [{ id: "1", name: "Alice", joinedAt: "today" }] };
+    const room = { code: "ABCD", status: "lobby", roles: [], participants: [{ id: "1", name: "Alice", joinedAt: "today" }] };
     expect(() => validateResponse(roomResponseSchema, { room })).toThrow("Invalid room response");
     expect(() => validateResponse(roomResponseSchema, { room: { ...room, participants: [{ ...room.participants[0], role: "host" }] } })).toThrow("Invalid room response");
   });
