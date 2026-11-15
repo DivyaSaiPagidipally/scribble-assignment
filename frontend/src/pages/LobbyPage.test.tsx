@@ -6,8 +6,8 @@ import { api, type RoomSnapshot } from "../services/api";
 import { RoomStoreProvider, useRoomState, useRoomStore } from "../state/roomStore";
 import { LobbyPage } from "./LobbyPage";
 
-const ada = { id: "p1", name: "Ada", joinedAt: "2025-01-01" };
-const bob = { id: "p2", name: "Bob", joinedAt: "2025-01-02" };
+const ada = { id: "p1", name: "Ada", role: "drawer", joinedAt: "2025-01-01" } as const;
+const bob = { id: "p2", name: "Bob", role: "guesser", joinedAt: "2025-01-02" } as const;
 const snapshot = (participants: RoomSnapshot["participants"]): RoomSnapshot => ({
   code: "ABCD", status: "lobby", participants, availableWords: [], roles: ["drawer", "guesser"]
 });
@@ -52,11 +52,13 @@ afterEach(() => {
 });
 
 describe("lobby participants", () => {
-  it("shows every player as a named card followed by the player count", () => {
+  it("shows every player as a card with their name and role followed by the player count", () => {
     const view = renderLobby(snapshot([ada, bob]));
     try {
       const cards = view.container.querySelectorAll(".player-list > .player-card");
-      expect(Array.from(cards, (card) => card.textContent)).toEqual(["Ada", "Bob"]);
+      expect(Array.from(cards, (card) => Array.from(card.querySelectorAll("span"), (span) => span.textContent))).toEqual([
+        ["Ada", "drawer"], ["Bob", "guesser"]
+      ]);
       expect(view.container.querySelector(".player-list + p")?.textContent).toBe("2 players");
     } finally {
       view.cleanup();
@@ -83,7 +85,9 @@ describe("lobby participants", () => {
       expect(view.container.querySelector(".player-list + p")?.textContent).toBe("1 player");
       await refresh(view.container);
       expect(fetchRoom).toHaveBeenCalledWith("ABCD", "p1");
-      expect(Array.from(view.container.querySelectorAll(".player-card"), (card) => card.textContent)).toEqual(["Ada", "Bob"]);
+      expect(Array.from(view.container.querySelectorAll(".player-card"), (card) =>
+        Array.from(card.querySelectorAll("span"), (span) => span.textContent)
+      )).toEqual([["Ada", "drawer"], ["Bob", "guesser"]]);
       expect(view.container.querySelector(".player-list + p")?.textContent).toBe("2 players");
       await refresh(view.container);
       expect(view.container.querySelectorAll(".player-card")).toHaveLength(0);
@@ -99,7 +103,7 @@ describe("lobby participants", () => {
     const view = renderLobby(snapshot([ada]));
     try {
       await refresh(view.container);
-      expect(view.container.querySelector(".player-card")?.textContent).toBe("Ada");
+      expect(view.container.querySelector(".player-card")?.textContent).toBe("Adadrawer");
       expect(view.container.textContent).toContain("1 player");
       expect(view.container.textContent).toContain("Network error");
     } finally {

@@ -79,7 +79,7 @@ Implemented today:
 - join room by code flow
 - fetch room snapshot flow
 - in-memory room storage on the backend
-- lobby player cards and player count from the latest fetched snapshot, with an empty state
+- lobby player cards showing names and server-assigned roles, plus a player count and empty state from the latest fetched snapshot
 - game screen placeholders for canvas, guess input, scoreboard, and results
 - basic light UI styling
 
@@ -88,7 +88,7 @@ Not implemented yet:
 - host behavior or host-only permissions
 - automatic lobby polling
 - start game flow
-- drawer assignment
+- drawer reassignment or rotation
 - secret word visibility rules
 - drawing interaction
 - clear canvas action
@@ -106,7 +106,7 @@ Backend endpoints currently available:
 - `POST /rooms/:code/join`
 - `GET /rooms/:code`
 
-The backend stores all room data in memory only. Restarting the backend clears all rooms.
+The backend stores all room data in memory only. Restarting the backend clears all rooms. Create, join, and fetch responses include `room.participants`, each with `id`, `name`, `role` (`drawer` or `guesser`), and `joinedAt`. The creator is assigned drawer on creation; later joiners are guessers. Roles are not user-selected or reassigned in this feature.
 
 ## Run The Backend
 
@@ -128,7 +128,7 @@ npm run dev
 
 The frontend runs on `http://localhost:5173`.
 
-If needed, point the frontend at a different backend with `VITE_API_URL`.
+Set `VITE_API_URL=http://localhost:3001` for the local backend (the starter's default URL contains `/bug`).
 
 ## Quick Verification
 
@@ -138,7 +138,7 @@ Use this to confirm the starter works from a clean clone:
 2. Start the frontend and open `http://localhost:5173`.
 3. Confirm the Start screen shows `Create Room` and `Join Room`.
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
-5. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. The list only changes on refresh; player roles are not assigned or shown in the lobby.
+5. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. Confirm the creator is shown as drawer and the joiner as guesser. The list only changes on refresh.
 6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
 7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 

@@ -50,6 +50,7 @@ export function LobbyPage() {
               {room.participants.map((participant) => (
                 <li className="player-card" key={participant.id}>
                   <span>{participant.name}</span>
+                  <span>{participant.role}</span>
                 </li>
               ))}
             </ul>

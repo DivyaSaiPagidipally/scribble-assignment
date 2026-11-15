@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { Participant, Room, RoomSnapshot } from "../models/game.js";
+import type { Participant, ParticipantRole, Room, RoomSnapshot } from "../models/game.js";
 import { STARTER_ROLES, STARTER_WORDS } from "../seed/starterData.js";
 
 const rooms = new Map<string, Room>();
@@ -33,10 +33,11 @@ function displayName(name?: string) {
   return name || "Player";
 }
 
-function createParticipant(name?: string): Participant {
+function createParticipant(role: ParticipantRole, name?: string): Participant {
   return {
     id: randomUUID(),
     name: displayName(name),
+    role,
     joinedAt: now()
   };
 }
@@ -50,7 +51,7 @@ export function listWords() {
 }
 
 export function createRoom(playerName?: string) {
-  const participant = createParticipant(playerName);
+  const participant = createParticipant("drawer", playerName);
   const room: Room = {
     code: generateUniqueCode(),
     status: "lobby",
@@ -74,7 +75,7 @@ export function joinRoom(code: string, playerName?: string) {
     return null;
   }
 
-  const participant = createParticipant(playerName);
+  const participant = createParticipant("guesser", playerName);
   room.participants.push(participant);
   room.updatedAt = now();
   rooms.set(room.code, room);
