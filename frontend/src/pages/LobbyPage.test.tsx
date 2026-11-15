@@ -9,7 +9,7 @@ import { LobbyPage } from "./LobbyPage";
 const ada = { id: "p1", name: "Ada", role: "drawer", joinedAt: "2025-01-01" } as const;
 const bob = { id: "p2", name: "Bob", role: "guesser", joinedAt: "2025-01-02" } as const;
 const snapshot = (participants: RoomSnapshot["participants"]): RoomSnapshot => ({
-  code: "ABCD", status: "lobby", participants, availableWords: [], roles: ["drawer", "guesser"]
+  code: "ABCD", status: "lobby", participants, roles: ["drawer", "guesser"]
 });
 
 function SeededLobby({ room }: { room: RoomSnapshot }) {

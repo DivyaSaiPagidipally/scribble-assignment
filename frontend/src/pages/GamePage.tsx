@@ -48,6 +48,11 @@ export function GamePage() {
         </div>
 
         <aside className="game-page__sidebar game-page__sidebar--right">
+          {viewer?.role === "drawer" && room.currentWord ? (
+            <Card title="Your word">
+              <p>{room.currentWord}</p>
+            </Card>
+          ) : null}
           <Card title="Player Info">
             <dl className="detail-list">
               <div>

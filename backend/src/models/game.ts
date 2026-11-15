@@ -20,8 +20,8 @@ export interface RoomSnapshot {
   code: string;
   status: RoomStatus;
   participants: Participant[];
-  availableWords: string[];
   roles: ParticipantRole[];
+  currentWord?: string;
 }
 
 export interface RoomSessionResponse {

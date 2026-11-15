@@ -42,6 +42,36 @@ describe("room API roles", () => {
     expect(refreshed.room.participants).toEqual(joined.room.participants);
   });
 
+  it("returns the current word to the drawer on create and refresh", async () => {
+    const response = await fetch(`${baseUrl}/rooms`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ playerName: "Alice" })
+    });
+    const created = await response.json();
+    expect(created.room.currentWord).toBeTruthy();
+    const refreshed = await (await fetch(`${baseUrl}/rooms/${created.room.code}?participantId=${created.participantId}`)).json();
+    expect(refreshed.room.currentWord).toBe(created.room.currentWord);
+  });
+
+  it("omits the word and word list from guesser, anonymous and unknown viewer responses", async () => {
+    const post = (path: string) => fetch(`${baseUrl}${path}`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ playerName: "Player" })
+    });
+    const created = await (await post("/rooms")).json();
+    const joined = await (await post(`/rooms/${created.room.code}/join`)).json();
+    const paths = [
+      `/rooms/${created.room.code}?participantId=${joined.participantId}`,
+      `/rooms/${created.room.code}`,
+      `/rooms/${created.room.code}?participantId=unknown`
+    ];
+    expect(joined.room).not.toHaveProperty("currentWord");
+    expect(joined.room).not.toHaveProperty("availableWords");
+    for (const path of paths) {
+      const { room } = await (await fetch(`${baseUrl}${path}`)).json();
+      expect(room).not.toHaveProperty("currentWord");
+      expect(room).not.toHaveProperty("availableWords");
+    }
+  });
+
   it("reports invalid stored response data as a server error", async () => {
     const { room } = createRoom("Alice");
     saveRoom({ ...room, participants: [{ ...room.participants[0], role: "invalid" as ParticipantRole }] });
