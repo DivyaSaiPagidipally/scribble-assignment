@@ -300,6 +300,18 @@ input {
   justify-content: flex-start;
 }
 
+.lobby-start {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}
+
+@media (max-width: 720px) {
+  .lobby-start {
+    width: 100%;
+  }
+}
+
 .button {
   display: inline-flex;
   align-items: center;

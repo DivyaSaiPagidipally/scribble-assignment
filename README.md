@@ -80,6 +80,7 @@ Implemented today:
 - fetch room snapshot flow
 - in-memory room storage on the backend
 - lobby player cards showing names and server-assigned roles, plus a player count and empty state from the latest fetched snapshot
+- lobby Start Game button disabled with a hint until the latest snapshot has at least two players; it then opens the placeholder Game screen
 - game screen placeholders for canvas, guess input, scoreboard, and results
 - basic light UI styling
 
@@ -138,8 +139,8 @@ Use this to confirm the starter works from a clean clone:
 2. Start the frontend and open `http://localhost:5173`.
 3. Confirm the Start screen shows `Create Room` and `Join Room`.
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
-5. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. Confirm the creator is shown as drawer and the joiner as guesser. The list only changes on refresh.
-6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
+5. With one player, confirm Start Game is disabled and the hint explains that at least two players are needed. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. Confirm the creator is shown as drawer, the joiner as guesser, and Start Game is enabled. The list only changes on refresh.
+6. Select Start Game and confirm the Game screen's canvas, guess input, scoreboard, and result areas are placeholders only. This client-side button does not implement a server-side game start or host permission check.
 7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 
 ## Recommended Build Order

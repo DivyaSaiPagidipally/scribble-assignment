@@ -70,9 +70,17 @@ export function LobbyPage() {
         <button className="button button--secondary" disabled={isLoading} onClick={handleRefresh}>
           {isLoading ? "Refreshing..." : "Refresh Room"}
         </button>
-        <button className="button button--primary" onClick={() => navigate("/game")}>
-          Start Game
-        </button>
+        <div className="lobby-start">
+          <button
+            className="button button--primary"
+            disabled={room.participants.length < 2}
+            aria-describedby={room.participants.length < 2 ? "start-game-hint" : undefined}
+            onClick={() => navigate("/game")}
+          >
+            Start Game
+          </button>
+          {room.participants.length < 2 && <p id="start-game-hint">At least two players are needed to start the game.</p>}
+        </div>
       </div>
     </section>
   );
