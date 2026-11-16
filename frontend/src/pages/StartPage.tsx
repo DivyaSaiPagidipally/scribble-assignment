@@ -35,6 +35,8 @@ export function StartPage() {
           <p>Score the most points across all rounds to be crowned the winner.</p>
         </Card>
       </div>
+
+      <footer className="start-page__footer">Hello</footer>
     </section>
   );
 }

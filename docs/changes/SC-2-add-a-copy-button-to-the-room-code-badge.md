@@ -1,15 +1,20 @@
 ## Summary
-Add copy button to room code badge
+Add Hello footer to the main page
 
 ## What changed
-- Added a compact Copy button alongside the existing code in the shared lobby and game badge.
+- Added a Hello footer at the end of the Start page.
+- Earlier work added a compact Copy button alongside the existing code in the shared lobby and game badge.
 - Show Copied for two seconds after a successful clipboard write; report failures in the badge hint and retain the readable code.
 
 ## Decisions
+- Place Hello only on the Start page, following the human clarification, rather than on every screen.
 - Use the browser Clipboard API and a native button. On rejection or unavailable API, offer manual copying rather than claiming success.
 - Restart the feedback timer on repeated copies, clean it up on unmount or code change, and ignore stale requests. Keep styling scoped to the badge, including a fixed button width so its label change does not shift the row.
 
 ## How each criterion is met
+- Add Hello: `StartPage > shows Hello in the footer after the main page content` checks the footer text and placement.
+
+Earlier copy-button criteria and coverage:
 - After creation, the badge shows Copy beside the code: `create room > shows the room code and Copy button in the lobby badge after creation` and `RoomCodeBadge > keeps the code readable next to a focusable, named native button`.
 - Feedback lasts about two seconds: `RoomCodeBadge > copies the unchanged code and resets Copied two seconds after the latest click`.
 - Keyboard access and name: `RoomCodeBadge > keeps the code readable next to a focusable, named native button` checks native button semantics, label and focusability. Native browser keyboard activation is relied upon.
@@ -17,9 +22,18 @@ Add copy button to room code badge
 - Failure and stale responses: `RoomCodeBadge > reports clipboard rejection or unavailability without claiming success` and `RoomCodeBadge > ignores an old copy result when the room code changes`.
 
 ## How to verify
-Start both apps per README, create a room on localhost or HTTPS, use Tab and Enter/Space to activate Copy, paste the code, and check the feedback resets after two seconds. Check the badge and surrounding layout at desktop and mobile widths. Deny clipboard permission or use an unavailable clipboard to check the manual-copy hint.
+Open the Start page and confirm Hello appears in the footer after the page content.
+
+For the earlier copy-button work, start both apps per README, create a room on localhost or HTTPS, use Tab and Enter/Space to activate Copy, paste the code, and check the feedback resets after two seconds. Check the badge and surrounding layout at desktop and mobile widths. Deny clipboard permission or use an unavailable clipboard to check the manual-copy hint.
 
 ## Tests
+- Added `StartPage.test.tsx`; targeted frontend test passed (1 test). The initial attempt from the repository root failed because there is no root package.json; rerunning in frontend passed.
+- Current frontend `npm test`: passed, 12 tests; React Router emitted future-flag warnings. Backend `npm test`: passed, 9 tests.
+- Current frontend `npx tsc -b --pretty false` and `npm run build`: passed. Backend `npx tsc -p tsconfig.json --noEmit` and `npm run build`: passed.
+- Current `npm run lint` in both apps: unavailable, neither package defines a lint script.
+- Current `git diff --check`: passed. No browser visual verification performed.
+
+Earlier copy-button work:
 - Added four badge tests and one create-to-lobby integration test.
 - Frontend `npm test`: passed twice, 7 tests; React Router emitted future-flag warnings.
 - Backend `npm test`: passed twice, 4 tests.
@@ -30,7 +44,7 @@ Start both apps per README, create a room on localhost or HTTPS, use Tab and Ent
 - `git diff --check`: passed. No browser visual or manual keyboard verification performed.
 
 ## Docs updated
-- README: documented copying, verification, and clipboard requirements/failure.
+- README: documented the Hello footer and its verification; previously documented copying, verification, and clipboard requirements/failure.
 - No agent instructions or API documentation changed; there is no API change.
 
 ## Open questions
