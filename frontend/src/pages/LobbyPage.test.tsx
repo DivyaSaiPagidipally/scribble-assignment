@@ -51,6 +51,67 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe("lobby start button", () => {
+  it("enables Start Game for two or more players", () => {
+    const carol = { id: "p3", name: "Carol", role: "guesser", joinedAt: "2025-01-03" } as const;
+    for (const participants of [[ada, bob], [ada, bob, carol]]) {
+      const view = renderLobby(snapshot(participants));
+      try {
+        const button = Array.from(view.container.querySelectorAll("button")).find((item) => item.textContent === "Start Game");
+        expect(button).toBeDefined();
+        expect(button?.disabled).toBe(false);
+        expect(view.container.querySelector("#start-game-hint")).toBeNull();
+      } finally {
+        view.cleanup();
+      }
+    }
+  });
+
+  it("updates the start button and hint when the room is refreshed", async () => {
+    vi.spyOn(api, "fetchRoom")
+      .mockResolvedValueOnce({ room: snapshot([ada, bob]) })
+      .mockResolvedValueOnce({ room: snapshot([ada]) });
+    const view = renderLobby(snapshot([ada]));
+    try {
+      const button = Array.from(view.container.querySelectorAll("button")).find((item) => item.textContent === "Start Game");
+      expect(button?.disabled).toBe(true);
+      await refresh(view.container);
+      expect(button?.disabled).toBe(false);
+      expect(view.container.querySelector("#start-game-hint")).toBeNull();
+      await refresh(view.container);
+      expect(button?.disabled).toBe(true);
+      expect(view.container.querySelector("#start-game-hint")).not.toBeNull();
+    } finally {
+      view.cleanup();
+    }
+  });
+
+  it("shows the minimum-player hint under Start Game when needed", () => {
+    const view = renderLobby(snapshot([ada]));
+    try {
+      const button = Array.from(view.container.querySelectorAll("button")).find((item) => item.textContent === "Start Game");
+      const hint = button?.nextElementSibling;
+      expect(hint?.textContent).toBe("At least two players are needed to start the game.");
+      expect(button?.getAttribute("aria-describedby")).toBe(hint?.id);
+    } finally {
+      view.cleanup();
+    }
+  });
+
+  it("disables Start Game with fewer than two players", () => {
+    for (const participants of [[ada], []]) {
+      const view = renderLobby(snapshot(participants));
+      try {
+        const button = Array.from(view.container.querySelectorAll("button")).find((item) => item.textContent === "Start Game");
+        expect(button).toBeDefined();
+        expect(button?.disabled).toBe(true);
+      } finally {
+        view.cleanup();
+      }
+    }
+  });
+});
+
 describe("lobby participants", () => {
   it("shows every player as a card with their name and role followed by the player count", () => {
     const view = renderLobby(snapshot([ada, bob]));
