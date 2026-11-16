@@ -411,6 +411,21 @@ input {
   font-weight: 500;
 }
 
+.player-card--current {
+  border-color: #4f46e5;
+  background: #eef2ff;
+  box-shadow: inset 4px 0 0 #4f46e5;
+}
+
+.player-role {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
 .status-line,
 .placeholder-note {
   width: max-content;
