@@ -57,9 +57,46 @@ describe("lobby participants", () => {
     try {
       const cards = view.container.querySelectorAll(".player-list > .player-card");
       expect(Array.from(cards, (card) => Array.from(card.querySelectorAll("span"), (span) => span.textContent))).toEqual([
-        ["Ada", "drawer"], ["Bob", "guesser"]
+        ["Ada (You)", "drawer"], ["Bob", "guesser"]
       ]);
+      expect(Array.from(cards, (card) => card.querySelector(".player-role")?.textContent)).toEqual(["drawer", "guesser"]);
       expect(view.container.querySelector(".player-list + p")?.textContent).toBe("2 players");
+    } finally {
+      view.cleanup();
+    }
+  });
+
+  it("highlights and labels only the current player", () => {
+    const view = renderLobby(snapshot([ada, bob]));
+    try {
+      const cards = view.container.querySelectorAll(".player-card");
+      expect(cards[0].classList.contains("player-card--current")).toBe(true);
+      expect(cards[0].textContent).toContain("Ada (You)");
+      expect(cards[1].classList.contains("player-card--current")).toBe(false);
+      expect(cards[1].textContent).not.toContain("(You)");
+    } finally {
+      view.cleanup();
+    }
+  });
+
+  it("does not highlight anyone when the current player is absent", () => {
+    const view = renderLobby(snapshot([bob]));
+    try {
+      expect(view.container.querySelector(".player-card--current")).toBeNull();
+      expect(view.container.textContent).not.toContain("(You)");
+    } finally {
+      view.cleanup();
+    }
+  });
+
+  it("lists players oldest first without changing the snapshot, preserving ties", () => {
+    const carol = { id: "p3", name: "Carol", role: "guesser", joinedAt: bob.joinedAt } as const;
+    const room = snapshot([bob, carol, ada]);
+    const view = renderLobby(room);
+    try {
+      expect(Array.from(view.container.querySelectorAll(".player-card > span:first-child"), (name) => name.textContent))
+        .toEqual(["Ada (You)", "Bob", "Carol"]);
+      expect(room.participants.map((player) => player.name)).toEqual(["Bob", "Carol", "Ada"]);
     } finally {
       view.cleanup();
     }
@@ -87,7 +124,7 @@ describe("lobby participants", () => {
       expect(fetchRoom).toHaveBeenCalledWith("ABCD", "p1");
       expect(Array.from(view.container.querySelectorAll(".player-card"), (card) =>
         Array.from(card.querySelectorAll("span"), (span) => span.textContent)
-      )).toEqual([["Ada", "drawer"], ["Bob", "guesser"]]);
+      )).toEqual([["Ada (You)", "drawer"], ["Bob", "guesser"]]);
       expect(view.container.querySelector(".player-list + p")?.textContent).toBe("2 players");
       await refresh(view.container);
       expect(view.container.querySelectorAll(".player-card")).toHaveLength(0);
@@ -103,7 +140,7 @@ describe("lobby participants", () => {
     const view = renderLobby(snapshot([ada]));
     try {
       await refresh(view.container);
-      expect(view.container.querySelector(".player-card")?.textContent).toBe("Adadrawer");
+      expect(view.container.querySelector(".player-card")?.textContent).toBe("Ada (You)drawer");
       expect(view.container.textContent).toContain("1 player");
       expect(view.container.textContent).toContain("Network error");
     } finally {

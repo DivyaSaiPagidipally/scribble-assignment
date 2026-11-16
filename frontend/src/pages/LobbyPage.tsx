@@ -8,7 +8,7 @@ import { useRoomState, useRoomStore } from "../state/roomStore";
 export function LobbyPage() {
   const navigate = useNavigate();
   const roomStore = useRoomStore();
-  const { room, error, isLoading } = useRoomState();
+  const { room, participantId, error, isLoading } = useRoomState();
   const [refreshError, setRefreshError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -47,10 +47,10 @@ export function LobbyPage() {
             <p>No participants are connected to this room yet.</p>
           ) : (
             <ul className="player-list">
-              {room.participants.map((participant) => (
-                <li className="player-card" key={participant.id}>
-                  <span>{participant.name}</span>
-                  <span>{participant.role}</span>
+              {[...room.participants].sort((a, b) => Date.parse(a.joinedAt) - Date.parse(b.joinedAt)).map((participant) => (
+                <li className={`player-card${participant.id === participantId ? " player-card--current" : ""}`} key={participant.id}>
+                  <span>{participant.name}{participant.id === participantId ? " (You)" : ""}</span>
+                  <span className="player-role">{participant.role}</span>
                 </li>
               ))}
             </ul>
