@@ -36,7 +36,7 @@ export function StartPage() {
         </Card>
       </div>
 
-      <footer className="start-page__footer">Hello</footer>
+      <footer className="start-page__footer">Scribble@2026</footer>
     </section>
   );
 }
