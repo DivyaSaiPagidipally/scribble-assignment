@@ -1,5 +1,7 @@
 # Contributing
 
+Open an issue before a pull request.
+
 Use Node.js 18+ and npm 9+. From the repository root, install and start the backend:
 
 ```bash
