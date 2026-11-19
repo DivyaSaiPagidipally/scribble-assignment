@@ -8,7 +8,7 @@ npm install
 npm run dev
 ```
 
-The backend runs at http://localhost:3001. In a separate terminal, from the repository root, install and start the frontend:
+The backend runs at http://localhost:3001; check http://localhost:3001/health for `{"ok":true}`. In a separate terminal, from the repository root, install and start the frontend:
 
 ```bash
 cd frontend

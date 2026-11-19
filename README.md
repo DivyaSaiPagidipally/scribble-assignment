@@ -125,12 +125,12 @@ The backend runs on `http://localhost:3001`.
 ```bash
 cd frontend
 npm install
-npm run dev
+VITE_API_URL=http://localhost:3001 npm run dev
 ```
 
 The frontend runs on `http://localhost:5173`.
 
-Set `VITE_API_URL=http://localhost:3001` for the local backend (the starter's default URL contains `/bug`).
+The command sets `VITE_API_URL` for the local backend (the starter's default URL contains `/bug`).
 
 ## Quick Verification
 
