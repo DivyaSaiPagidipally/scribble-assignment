@@ -1,4 +1,4 @@
-# Contributing to Scribble
+# Contributing
 
 Use Node.js 18+ and npm 9+. From the repository root, install and start the backend:
 
