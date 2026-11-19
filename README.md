@@ -110,6 +110,8 @@ The backend stores all room data in memory only. Restarting the backend clears a
 
 ## Run The Backend
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a short local setup guide.
+
 ```bash
 cd backend
 npm install
