@@ -1,6 +1,6 @@
 # Contributing
 
-Open an issue before a pull request. The repository-wide code owner is
+Open an issue before a pull request, except for vulnerabilities: report those privately as described in [SECURITY.md](SECURITY.md). The repository-wide code owner is
 `@DivyaSaiPagidipally`, as listed in [CODEOWNERS](.github/CODEOWNERS).
 
 Use Node.js 18+ and npm 9+. From the repository root, install and start the backend:
