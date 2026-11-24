@@ -180,6 +180,11 @@ input {
   max-width: 800px;
 }
 
+.start-page__footer {
+  color: var(--ink-soft);
+  text-align: center;
+}
+
 .page-header {
   display: grid;
   gap: 12px;
