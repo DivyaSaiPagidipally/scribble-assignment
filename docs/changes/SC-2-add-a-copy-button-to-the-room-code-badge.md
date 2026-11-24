@@ -1,18 +1,19 @@
 ## Summary
-Update the Start page footer text
+Add Hello to the Start page
 
 ## What changed
-- Changed the existing Start page footer from Hello to Scribble@2026, as requested in review.
+- Added Hello as text at the top of the Start page, preserving the existing Scribble@2026 footer.
+- Previously changed the Start page footer from Hello to Scribble@2026, as requested in review.
 - Earlier work added a compact Copy button alongside the existing code in the shared lobby and game badge.
 - Show Copied for two seconds after a successful clipboard write; report failures in the badge hint and retain the readable code.
 
 ## Decisions
-- Keep the footer only on the Start page, following the human clarification, and use the reviewer's exact text Scribble@2026.
+- Put Hello in the Start page content as clarified by the human, without changing the previously reviewed Scribble@2026 footer.
 - Use the browser Clipboard API and a native button. On rejection or unavailable API, offer manual copying rather than claiming success.
 - Restart the feedback timer on repeated copies, clean it up on unmount or code change, and ignore stale requests. Keep styling scoped to the badge, including a fixed button width so its label change does not shift the row.
 
 ## How each criterion is met
-- Add Hello: `StartPage > shows Scribble@2026 in the footer after the main page content` checks the clarified and reviewed footer text and placement.
+- Add Hello: `StartPage > shows Hello as text on the main page` checks the greeting in the Start page content. The existing `StartPage > shows Scribble@2026 in the footer after the main page content` test preserves the reviewed footer.
 
 Earlier copy-button criteria and coverage:
 - After creation, the badge shows Copy beside the code: `create room > shows the room code and Copy button in the lobby badge after creation` and `RoomCodeBadge > keeps the code readable next to a focusable, named native button`.
@@ -22,11 +23,17 @@ Earlier copy-button criteria and coverage:
 - Failure and stale responses: `RoomCodeBadge > reports clipboard rejection or unavailability without claiming success` and `RoomCodeBadge > ignores an old copy result when the room code changes`.
 
 ## How to verify
-Open the Start page and confirm Scribble@2026 appears in the footer after the page content.
+Open the Start page and confirm Hello appears above the main content and Scribble@2026 appears in the footer.
 
 For the earlier copy-button work, start both apps per README, create a room on localhost or HTTPS, use Tab and Enter/Space to activate Copy, paste the code, and check the feedback resets after two seconds. Check the badge and surrounding layout at desktop and mobile widths. Deny clipboard permission or use an unavailable clipboard to check the manual-copy hint.
 
 ## Tests
+- Added `StartPage > shows Hello as text on the main page`; `cd frontend && npm test -- src/pages/StartPage.test.tsx` passed (2 tests).
+- Frontend `npm test`: passed (16 tests, React Router future-flag warnings); backend `npm test`: passed (13 tests).
+- Frontend `npx tsc -b --pretty false` and `npm run build`: passed. Backend `npx tsc -p tsconfig.json --noEmit` and `npm run build`: passed.
+- `npm run lint` in both apps: unavailable because neither package defines a lint script. No browser visual verification performed.
+
+Previous footer update:
 - Updated `StartPage.test.tsx` for the reviewed text; `cd frontend && npm test -- src/pages/StartPage.test.tsx` passed (1 test). The initial attempt from the repository root failed because there is no root package.json.
 - Current frontend `npm test`: passed, 12 tests (React Router future-flag warnings); backend `npm test`: passed, 9 tests.
 - Current frontend `npx tsc -b --pretty false` and `npm run build`: passed. Backend `npx tsc -p tsconfig.json --noEmit` and `npm run build`: passed.
@@ -51,7 +58,7 @@ Earlier copy-button work:
 - `git diff --check`: passed. No browser visual or manual keyboard verification performed.
 
 ## Docs updated
-- README: updated the footer text and its verification; previously documented copying, verification, and clipboard requirements/failure.
+- README: documented Hello on the Start page and its verification; previously documented the footer, copying, verification, and clipboard requirements/failure.
 - No agent instructions or API documentation changed; there is no API change.
 
 ## Open questions

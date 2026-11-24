@@ -6,6 +6,7 @@ export function StartPage() {
   return (
     <section className="panel hero">
       <div className="start-hero__content" style={{ paddingBottom: '16px' }}>
+        <p>Hello</p>
         <PageHeader
           kicker="Play Now"
           title="Scribble Game"
