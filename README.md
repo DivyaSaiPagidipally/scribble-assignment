@@ -73,7 +73,7 @@ The current branch is scaffold-only.
 
 Implemented today:
 
-- app shell and page routing
+- app shell and page routing, including a Privacy Policy at `/privacy`
 - branded landing page and cleaned starter UI
 - create room flow, with a Copy button on the room code badge in the lobby and game screens
 - join room by code flow
@@ -142,7 +142,8 @@ Use this to confirm the starter works from a clean clone:
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
 5. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. Confirm the creator appears first with a drawer badge, the joiner has a guesser badge, and each tab highlights its own player with `(You)`. The list only changes on refresh.
 6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
-7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
+7. Open `http://localhost:5173/privacy` and confirm the Privacy Policy describes the room and player data collected.
+8. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 
 ## Recommended Build Order
 
