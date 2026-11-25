@@ -110,7 +110,7 @@ The backend stores all room data in memory only. Restarting the backend clears a
 
 ## Run The Backend
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for a short local setup guide. For vulnerability reporting, see [SECURITY.md](SECURITY.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a short local setup guide, [CHANGELOG.md](CHANGELOG.md) for changes, and [SECURITY.md](SECURITY.md) for vulnerability reporting.
 
 ```bash
 cd backend
