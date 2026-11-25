@@ -101,7 +101,7 @@ Not implemented yet:
 
 Backend endpoints currently available:
 
-- `GET /health`
+- `GET /health` — returns HTTP 200 with `{ "status": "ok" }`
 - `POST /rooms`
 - `POST /rooms/:code/join`
 - `GET /rooms/:code`
@@ -136,7 +136,7 @@ The command sets `VITE_API_URL` for the local backend (the starter's default URL
 
 Use this to confirm the starter works from a clean clone:
 
-1. Start the backend and confirm `http://localhost:3001/health` returns `{ "ok": true }`.
+1. Start the backend and confirm `http://localhost:3001/health` returns `{ "status": "ok" }`.
 2. Start the frontend and open `http://localhost:5173`.
 3. Confirm the Start screen shows `Create Room` and `Join Room`.
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
