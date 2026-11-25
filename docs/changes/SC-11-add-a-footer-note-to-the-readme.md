@@ -4,23 +4,27 @@ Add a footer note to the README
 
 ## What changed
 
-Appended `Built and checked by Factory.` to `README.md`.
+Added a blank line before the existing `Built and checked by Factory.` footer in `README.md`.
 
 ## Decisions
 
-Kept the README change to the single requested line from the earlier attempt. No automated test file was added for static copy.
+Kept the footer text exactly as requested and separated it from the preceding content per review. No automated test file was added for static copy.
 
 ## How each criterion is met
 
-1. The README ends with the requested line; the `tail` footer check below passed.
+1. The README ends with the requested line; the footer check below also verifies the preceding blank line.
 
 ## How to verify
 
-Run `test "$(tail -n 1 README.md)" = 'Built and checked by Factory.'` from the repository root.
+From the repository root, run:
+
+```bash
+node -e "const fs = require('fs'); const data = fs.readFileSync('README.md', 'utf8'); if (!data.endsWith('\n\nBuilt and checked by Factory.\n')) process.exit(1); console.log('Footer check passed');"
+```
 
 ## Tests
 
-- Footer check and `git diff --check`: passed on re-verification.
+- No test file added for this static documentation change; the footer check and `git diff --check` passed.
 - `cd backend && npm test && npm run build`: passed (13 tests; TypeScript build passed).
 - `cd frontend && npm test && npm run build`: passed (14 tests; TypeScript/Vite build passed); React Router emitted future-flag warnings.
 - `npm test` at the root failed because there is no root `package.json`; the package suites above passed from their own directories.
