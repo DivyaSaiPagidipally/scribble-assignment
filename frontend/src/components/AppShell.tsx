@@ -13,6 +13,7 @@ export function AppShell({ children }: PropsWithChildren) {
         </div>
       </header>
       <main className="app-shell__main">{children}</main>
+      {/* Shown on every page */}
       <footer className="app-shell__footer">Scribble lab · starter build</footer>
     </div>
   );
