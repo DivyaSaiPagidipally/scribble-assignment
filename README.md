@@ -142,7 +142,7 @@ Use this to confirm the starter works from a clean clone:
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
 5. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. Confirm the creator appears first with a drawer badge, the joiner has a guesser badge, and each tab highlights its own player with `(You)`. The list only changes on refresh.
 6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
-7. Confirm each page has a `Scribble lab · starter build` footer below the content, including on a phone-width screen.
+7. Confirm each page has a `Scribble lab · starter build` footer below the content, including on a phone-width screen. Its accessible label is `Site footer`.
 8. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 
 ## Recommended Build Order

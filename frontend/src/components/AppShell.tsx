@@ -13,7 +13,7 @@ export function AppShell({ children }: PropsWithChildren) {
         </div>
       </header>
       <main className="app-shell__main">{children}</main>
-      <footer className="app-shell__footer">Scribble lab · starter build</footer>
+      <footer className="app-shell__footer" aria-label="Site footer">Scribble lab · starter build</footer>
     </div>
   );
 }

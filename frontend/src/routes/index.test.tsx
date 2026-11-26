@@ -36,7 +36,9 @@ describe("app shell footer", () => {
     try {
       act(() => root.render(<RoomStoreProvider><SeededRoutes /></RoomStoreProvider>));
       expect(container.querySelector("main h1")?.textContent).toBe(heading);
-      expect(container.querySelector(".app-shell > footer")?.textContent).toBe("Scribble lab · starter build");
+      const footer = container.querySelector(".app-shell > footer");
+      expect(footer?.textContent).toBe("Scribble lab · starter build");
+      expect(footer?.getAttribute("aria-label")).toBe("Site footer");
     } finally {
       act(() => root.unmount());
       container.remove();
