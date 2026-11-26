@@ -4,12 +4,14 @@ import { Card } from "../components/Card";
 import { PageHeader } from "../components/PageHeader";
 import { RoomCodeBadge } from "../components/RoomCodeBadge";
 import { useRoomState, useRoomStore } from "../state/roomStore";
+import { useRoomTitle } from "./useRoomTitle";
 
 export function LobbyPage() {
   const navigate = useNavigate();
   const roomStore = useRoomStore();
   const { room, participantId, error, isLoading } = useRoomState();
   const [refreshError, setRefreshError] = useState<string | null>(null);
+  useRoomTitle(room?.code);
 
   useEffect(() => {
     if (!room) {
