@@ -149,7 +149,7 @@ input {
   width: min(1200px, 100%);
   margin: 24px auto 0;
   color: var(--ink-soft);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   text-align: center;
 }
 
