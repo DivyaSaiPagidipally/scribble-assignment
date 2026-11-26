@@ -4,7 +4,7 @@ Show the room code in the tab title
 
 ## What changed
 
-Lobby and Game set the tab title from the current room snapshot and restore the default when leaving.
+Lobby and Game set the tab title to `Scribble · Room <code>` from the current room snapshot and restore `Scribble` when leaving. The earlier attempt already includes the requested `Scribble · ` prefix; no further code change was needed.
 
 ## Decisions
 
@@ -21,10 +21,11 @@ Start both apps as described in README. Create or join a room and check the tab 
 
 ## Tests
 
-- Added `frontend/src/pages/RoomTitle.test.tsx`. The focused test initially failed because the room title was absent; after implementation it passed. With the second criterion added, both tests passed.
+- The earlier attempt added `frontend/src/pages/RoomTitle.test.tsx`: its focused test initially failed because the room title was absent, then passed after implementation. Both tests passed when the second criterion was added.
+- Re-verification: each focused test passed separately with `npm test -- src/pages/RoomTitle.test.tsx -t <test name>` in `frontend` (the other test was filtered out).
 - Frontend `npm test`: 16 passed. Backend `npm test`: 13 passed. React Router emitted its existing v7 future-flag warnings.
-- Both `npm run build` commands and `npx tsc --noEmit -p tsconfig.json` passed.
-- `npm run lint` could not run in either app: neither defines a lint script. An accidental root `npm test` also failed because there is no root package.json; the app-specific suites above passed.
+- In each app, `npm run build` and `npx tsc --noEmit -p tsconfig.json` passed.
+- `npm run lint` could not run in either app: neither defines a lint script. In the earlier attempt, an accidental root `npm test` also failed because there is no root package.json.
 - Browser runtime verification was unavailable in this environment.
 
 ## Docs updated
