@@ -6,10 +6,12 @@ import { ResultPanel } from "../components/ResultPanel";
 import { RoomCodeBadge } from "../components/RoomCodeBadge";
 import { Scoreboard } from "../components/Scoreboard";
 import { useRoomState } from "../state/roomStore";
+import { useRoomTitle } from "./useRoomTitle";
 
 export function GamePage() {
   const navigate = useNavigate();
   const { room, participantId } = useRoomState();
+  useRoomTitle(room?.code);
 
   useEffect(() => {
     if (!room) {
