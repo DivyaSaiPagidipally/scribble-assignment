@@ -5,7 +5,10 @@ export const STARTER_WORDS = [
   "pizza",
   "castle",
   "guitar",
-  "sunflower"
+  "sunflower",
+  "balloon",
+  "dragon",
+  "umbrella"
 ] as const;
 
 export const STARTER_ROLES: ParticipantRole[] = ["drawer", "guesser"];

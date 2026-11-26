@@ -22,7 +22,7 @@ It already provides:
 - starter routes and screens for Start, Create Room, Join Room, Lobby, and Game
 - starter room API with in-memory state
 - starter seed data:
-  - words: `rocket`, `pizza`, `castle`, `guitar`, `sunflower`
+  - words: `rocket`, `pizza`, `castle`, `guitar`, `sunflower`, `balloon`, `dragon`, `umbrella`
   - roles: `drawer`, `guesser`
 
 It does not implement the required room and gameplay features described in the business scenarios below.
