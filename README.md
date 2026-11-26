@@ -74,7 +74,7 @@ The current branch is scaffold-only.
 Implemented today:
 
 - app shell and page routing
-- branded landing page and cleaned starter UI
+- branded landing page and cleaned starter UI, with a build label in the footer on every page
 - create room flow, with a Copy button on the room code badge in the lobby and game screens
 - join room by code flow
 - fetch room snapshot flow
@@ -142,7 +142,8 @@ Use this to confirm the starter works from a clean clone:
 4. Create a room and confirm you land on the Lobby screen. Select Copy next to the room code, paste it to verify it matches, and confirm Copied returns to Copy after about two seconds. The button also works with keyboard focus and activation.
 5. Open another tab, join the same room, and use the Lobby refresh button to load the latest player cards and count. Confirm the creator appears first with a drawer badge, the joiner has a guesser badge, and each tab highlights its own player with `(You)`. The list only changes on refresh.
 6. Open the Game screen and confirm the canvas, guess input, scoreboard, and result areas are placeholders only.
-7. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
+7. Confirm each page has a `Scribble lab · starter build` footer below the content, including on a phone-width screen.
+8. Treat any start-page marketing copy as presentational only; use this README for actual supported scope.
 
 ## Recommended Build Order
 
@@ -251,6 +252,8 @@ Provide a brief reflection report in an `.md` file. Use these prompts as a start
 > Spec Kit is the focus of this lab. The game is the vehicle. Each commit should remain explainable and traceable to your spec.
 
 ## Build Validation
+
+Run `npm test` in both `backend` and `frontend`. To check the footer layout in Chromium at phone width, run `npx playwright install chromium` once in `frontend`, then `npm run test:browser` there.
 
 Run both builds before handing off changes:
 
