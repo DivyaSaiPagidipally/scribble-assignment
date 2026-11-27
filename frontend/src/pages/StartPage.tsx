@@ -9,7 +9,7 @@ export function StartPage() {
         <PageHeader
           kicker="Play Now"
           title="Scribble Game"
-          description="Create a new room to play with friends or join an existing game using a room code. Take turns drawing and guessing words in real time."
+          description="Start a new room to play with friends or join an existing game using a room code. Take turns drawing and guessing words in real time."
         />
 
         <div className="button-row button-row--hero">
