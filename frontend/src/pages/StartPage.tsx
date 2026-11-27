@@ -9,7 +9,7 @@ export function StartPage() {
         <PageHeader
           kicker="Play Now"
           title="Scribble Game"
-          description="Create a new room to play with friends or join an existing game using a room code. Take turns drawing and guessing words in real-time."
+          description="Create a new room to play with friends or join an existing game using a room code. Take turns drawing and guessing words in real time."
         />
 
         <div className="button-row button-row--hero">
@@ -33,6 +33,10 @@ export function StartPage() {
 
         <Card title="Win" badge="Step 3">
           <p>Score the most points across all rounds to be crowned the winner.</p>
+        </Card>
+
+        <Card title="Play again" badge="Step 4">
+          <p>Start a new round with the same friends whenever you like.</p>
         </Card>
       </div>
     </section>
